@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"    
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"    
+       xsi:schemaLocation="http://www.springframework.org/schema/beans         
+       		http://www.springframework.org/schema/beans/spring-beans.xsd         
+       		http://www.springframework.org/schema/context         
+       		http://www.springframework.org/schema/context/spring-context.xsd    
+       		http://www.springframework.org/schema/mvc        
+       		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+       		
+	<!--
+	
+    	Spring 3.2+ changes the way content navigation happens somewhat.
+    	Pages are automatically checked for their extensions, and their 
+    	content-types are set accordingly.   To turn it off, register 
+    	an org.springframework.web.accept.ContentNegotiationManagerFactoryBean
+    	that sets the following parameters:
+    	http://static.springsource.org/spring-framework/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-config-content-negotiation
+    	
+     -->
+     
+    <mvc:default-servlet-handler/>
+    <mvc:annotation-driven/>
+    <context:component-scan base-package="org.alewis"/> 
+	<!--<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager" />
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+	    <property name="favorPathExtension" value="false" />
+	    <property name="favorParameter" value="true" />
+	    <property name="mediaTypes" >
+	        <value>
+	            json=application/json
+	            xml=application/xml
+	        </value>
+	    </property>
+	</bean>-->
+</beans>

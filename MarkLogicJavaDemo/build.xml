@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!--app-->
+<!DOCTYPE project>
+<!--
+==========================================================================
+  REMINDERS:  
+    1. Set project name to the name of your project
+==========================================================================
+-->
+
+<project name="MarkLogicJavaDemo" default="app.compile" basedir=".">
+	<property file="build.properties" />
+	<import file="../Model/build.xml" />
+
+	<patternset id="webfiles.patterns">
+		<exclude name="WEB-INF/**" />
+	</patternset>
+
+	<patternset id="webinf.patterns">
+		<include name="WEB-INF/**/*.xml" />
+		<include name="WEB-INF/**/*.properties" />
+		<include name="WEB-INF/lib/*" />
+	</patternset>
+
+	<path id="app.classpath">
+		<pathelement location="../Model/classes" />
+		<fileset dir="../libs/libs">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="app.init">
+		<tstamp />
+		<mkdir dir="${project.output.dir}" />
+		<mkdir dir="${project.deploy.dir}" />
+	</target>
+
+	<target name="app.clean" description="Clean the project" depends="model.clean">
+		<delete includeemptydirs="true" quiet="true">
+			<fileset dir="${project.output.dir}" includes="**/*">
+				 <exclude name="logback.groovy"/>
+			</fileset>
+			<fileset dir="${project.deploy.dir}" includes="**/*" />
+		</delete>
+	</target>
+
+	<target name="app.compile" description="Compile Java source files" depends="app.init, app.clean, model.compile">
+		<javac destdir="${project.output.dir}" classpathref="app.classpath" debug="${javac.debug}" nowarn="${javac.nowarn}" deprecation="${javac.deprecation}" encoding="Cp1252" source="1.6" target="1.6" executable="${javac.path}" fork="true" includeantruntime="no">
+			<src path="${project.src.dir}" />
+		</javac>
+	</target>
+
+	<target name="app.copy" description="Copy files to output directory" depends="app.init">
+		<patternset id="copy.patterns">
+			<include name="**/*.gif" />
+			<include name="**/*.jpg" />
+			<include name="**/*.jpeg" />
+			<include name="**/*.png" />
+			<include name="**/*.properties" />
+			<include name="**/*.xml" />
+			<include name="**/*.ejx" />
+			<include name="**/*.xcfg" />
+			<include name="**/*.cpx" />
+			<include name="**/*.dcx" />
+			<include name="**/*.sva" />
+			<include name="**/*.wsdl" />
+			<include name="**/*.ini" />
+			<include name="**/*.tld" />
+			<include name="**/*.tag" />
+			<include name="**/*.xlf" />
+			<include name="**/*.xsl" />
+			<include name="**/*.xsd" />
+		</patternset>
+		<copy todir="${project.output.dir}">
+			<fileset dir="${project.src.dir}">
+				<patternset refid="copy.patterns" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="app.war" description="Build WAR file" depends="app.compile">
+		<war destfile="${project.deploy.dir}/${app.name}.war" webxml="${project.html.dir}/WEB-INF/web.xml">
+			<zipfileset dir="${project.html.dir}" prefix="">
+				<patternset refid="webinf.patterns" />
+			</zipfileset>
+			<zipfileset dir="${project.html.dir}" prefix="">
+				<patternset refid="webfiles.patterns" />
+			</zipfileset>
+			<zipfileset dir="${project.output.dir}" prefix="WEB-INF/classes">
+				<exclude name="**/build.xml" />
+				<exclude name="**/build.properties" />
+			</zipfileset>
+			<zipfileset dir="${model.output.dir}" prefix="WEB-INF/classes">
+				<exclude name="**/build.xml" />
+				<exclude name="**/build.properties" />
+			</zipfileset>
+
+			<mappedresources>
+				<restrict>
+					<path refid="app.classpath" />
+					<type type="file" />
+				</restrict>
+				<chainedmapper>
+					<flattenmapper />
+					<globmapper from="*" to="WEB-INF/lib/*" />
+				</chainedmapper>
+			</mappedresources>
+		</war>
+	</target>
+</project>

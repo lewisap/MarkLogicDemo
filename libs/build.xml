@@ -1,0 +1,7 @@
+<project name="libs" default="" basedir=".">
+	<path id="libs.classpath">
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+</project>

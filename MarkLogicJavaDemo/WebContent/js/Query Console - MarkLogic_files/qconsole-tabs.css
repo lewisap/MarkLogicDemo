@@ -1,0 +1,221 @@
+/* Copyright 2011-2014 MarkLogic Corporation. All Rights Reserved. */
+div.qc-tabs-holder {
+	width:100%;
+	height:33px;
+	margin-left:1px;
+}
+div.qc-tabs-scroller {
+	position:relative;
+	float:left;	
+	height:33px;
+	overflow:hidden;
+}
+
+div.qc-tabs-scroll-pane {
+	position:relative;
+	width: 20000em;
+}
+
+div.qc-tabs-scroll-container-left {
+	height:28px;
+	margin:4px 1px 0 0;
+	float:left;
+	display:none;
+}
+div.qc-tabs-scroll-container-right {
+	height:28px;
+	margin:4px 2px 0 -2px;
+	float:left;
+	display:none;
+}
+div.qc-tabs-scroll-left-shadow {
+	float:left;
+	width:4px;
+	height:28px;
+	margin-left:-1px;
+	background-image:url(../images/shadow-left-tab.png);
+	background-position:0px 0px;
+}
+div.qc-tabs-scroll-right-shadow {
+	float:left;
+	margin-right:-1px;
+	width:4px;
+	height:28px;
+	background-image:url(../images/shadow-right-tab.png);
+	background-position:0px 0px;
+}
+
+
+div.qc-tabs-scroll-left {
+	float:left;	
+	width:18px;
+	height:27px;
+	border-color:#b2b2b2;
+	border-style:solid;
+	border-width:1px 1px;
+	background-image:url(../images/btn-tab-scroll-non-round.png);
+	background-position:-1px -1px;
+	cursor:pointer;	
+	-moz-border-radius-topright:4px; 
+	-moz-border-radius-topleft:4px; 
+	border-top-right-radius:4px; 
+	border-top-left-radius:4px;  
+	
+}
+
+div.qc-tabs-scroll-right {
+	float:left;	
+	width:18px;
+	height:27px;
+	border-color:#b2b2b2;
+	border-style:solid;
+	border-width:1px 1px;	
+	background-image:url(../images/btn-tab-scroll-non-round.png);
+	background-position:19px -1px;
+	cursor:pointer;	
+	-moz-border-radius-topright:4px; 
+	-moz-border-radius-topleft:4px; 
+	border-top-right-radius:4px; 
+	border-top-left-radius:4px;  
+}
+
+div.qc-tabs-scroll-left:active {
+	background-position:-1px 28px;
+}
+
+div.qc-tabs-scroll-right:active {
+	background-position:19px 28px;
+}
+
+div.qc-tabs-scroll-left.inactive {
+	background-position:-1px 57px;
+}
+
+div.qc-tabs-scroll-right.inactive {
+	background-position:19px 57px;
+}	
+
+
+ul.qc-tabs { 
+	position:absolute;
+	background-color:#f3f3f3; 
+	margin:0 0 0 -2px; 
+	height:32px;
+}  
+			
+ul.qc-tabs li {
+	float:left;
+	height:23px;
+	margin:4px 2px;	
+}
+		
+ul.qc-tabs .tab-button {
+	background:none repeat scroll 0 0 #ECE9D8;
+	border-color:#B2B2B2;
+	background-image:url(../images/default-theme/bg-tab.png);
+	border-style:solid;
+	border-width:1px 1px 0;
+	color:#444; 
+	display:block;
+	padding: 4px 6px 0 4px;
+	position:relative;
+	text-align:center;
+	-moz-border-radius-topright:4px; 
+	-moz-border-radius-topleft:4px; 
+	border-top-right-radius:4px; 
+	border-top-left-radius:4px;  
+	background-color:#ededed;
+	cursor:pointer;
+	font-size:11px;
+	font-weight:bold;
+}
+
+
+ul.qc-tabs .tab-button:active {
+	background-image:url(../images/default-theme/bg-tab-pressed.png);
+}
+ul.qc-tabs .tab-button.selected:active {
+		background-image:url(../images/default-theme/bg-tab-selected.png); 
+}
+
+ul.qc-tabs .selected { 
+	background-color:#fff; 
+	border-bottom:2px solid #fff; 
+	background-image:url(../images/default-theme/bg-tab-selected.png); 
+	color:#222222;
+/*	-moz-box-shadow: 1px -1px 2px #ddd;
+	box-shadow: 1px -1px 2px #ddd;
+	-webkit-box-shadow: 1px -1px 2px #ddd;*/
+}
+
+ul.qc-tabs li div.tab-name {
+	float:left;
+	margin:0;
+	padding:4px 5px 0 5px;
+}
+ul.qc-tabs li div.tab-name input {
+    height:11px; 
+    font-size:10px; 
+    line-height:11px;
+	user-select:text;
+	-moz-user-select:text;
+	-khtml-user-select:text;	
+}
+ul.qc-tabs li p {
+	float:left;	
+	background-image:url(../images/query-type.png);
+	background-position:0px 0px;
+	height:16px;
+	width:16px;
+	user-select:none;
+	-moz-user-select:none;
+	-khtml-user-select: none;		
+	margin:3px 0 0 1px;
+}
+ul.qc-tabs li p.sql {
+	background-position:0px 32px;
+}
+ul.qc-tabs li p.sparql {
+    background-position:0px 16px;
+}
+ul.qc-tabs li div.tab-close {
+	float:left;	
+	background-image:url(../images/btn-close-small.png);
+	background-position:0px 0px;
+	height:14px;
+	width:14px;
+	user-select:none;
+	-moz-user-select:none;
+	-khtml-user-select: none;		
+	margin:3px 0 0 1px;
+}
+ul.qc-tabs li div.tab-close:hover {
+	background-position:0px 28px;
+}
+ul.qc-tabs li div.tab-close:active {
+	background-position:0px 14px;
+}
+
+.qc-tabs-holder .add-tab-btn {
+	float:left;
+	height: 18px; 
+	width: 20px; 
+	cursor: pointer; 
+	border: 1px solid #B2B2B2;
+	border-radius: 4px 4px 4px 4px; 
+	-moz-border-radius: 4px 4px 4px 4px; 
+	-webkit-border-radius: 4px 4px 4px 4px;
+	text-align: center; 
+	margin: 7px 0 0 2px;
+	cursor:pointer;
+	background-image:url(../images/btn-tab-plus.png);
+	background-position:0px 0px;
+	user-select:none;
+	-moz-user-select:none;
+	-khtml-user-select: none;		
+}
+
+.qc-tabs-holder .add-tab-btn:active {
+	background-position:0px 18px;
+}
+

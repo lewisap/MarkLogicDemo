@@ -1,0 +1,7 @@
+/*!
+	Overrides and any other custom css for this demo app
+*/
+.jumbotron {padding: 0.5em 0.6em;}
+.jumbotron h1 { font-size: 2em; }
+.jumbotron p { font-size: 1.2em;}
+.jumbotron .btn { padding: 0.5em; }

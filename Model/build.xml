@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE project>
+
+<project name="Model" default="model.all" basedir=".">
+	<property file="../Model/build.properties"/>
+
+	<import file="../libs/build.xml" />
+
+	<path id="model.classpath">
+		<fileset dir="../libs/libs">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="model.init">
+		<tstamp/>
+		<mkdir dir="${model.output.dir}"/>
+	</target>
+
+	<target name="model.all" description="Build the project" depends="model.clean,model.compile,model.copy"/>
+
+	<target name="model.clean" description="Clean the project">
+		<delete includeemptydirs="true" quiet="true">
+			<fileset dir="${model.output.dir}" includes="**/*"/>
+		</delete>
+	</target>
+
+	<target name="model.compile" description="Compile Java source files" depends="model.init">
+		<javac destdir="${model.output.dir}" classpathref="model.classpath"
+           debug="${javac.debug}" nowarn="${javac.nowarn}"
+           deprecation="${javac.deprecation}" encoding="Cp1252" source="1.6"
+           target="1.6" executable="${javac.path}" fork="true" includeantruntime="no">
+			<src path="${model.src.dir}"/>
+		</javac>
+	</target>
+
+	<target name="model.copy" description="Copy files to output directory"
+          depends="model.init">
+		<patternset id="copy.patterns">
+			<include name="**/*.gif"/>
+			<include name="**/*.jpg"/>
+			<include name="**/*.jpeg"/>
+			<include name="**/*.png"/>
+			<include name="**/*.properties"/>
+			<include name="**/*.xml"/>
+			<include name="**/*.ejx"/>
+			<include name="**/*.xcfg"/>
+			<include name="**/*.cpx"/>
+			<include name="**/*.dcx"/>
+			<include name="**/*.sva"/>
+			<include name="**/*.wsdl"/>
+			<include name="**/*.ini"/>
+			<include name="**/*.tld"/>
+			<include name="**/*.tag"/>
+			<include name="**/*.xlf"/>
+			<include name="**/*.xsl"/>
+			<include name="**/*.xsd"/>
+		</patternset>
+		<copy todir="${model.output.dir}">
+			<fileset dir="${model.src.dir}">
+				<patternset refid="copy.patterns"/>
+			</fileset>
+		</copy>
+	</target>
+</project>

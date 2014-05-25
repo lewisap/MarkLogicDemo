@@ -1,0 +1,59 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+					http://www.springframework.org/schema/beans/spring-beans.xsd
+					http://www.springframework.org/schema/security
+					http://www.springframework.org/schema/security/spring-security.xsd">
+ 
+ 
+ 	<!-- define the urls that are not secure (anything that might be included by the login page, or run before authentication) -->
+ 	<http pattern="/ingest*" security="none"/>
+ 	<http pattern="/search*" security="none"/>
+ 	<http pattern="/consume*" security="none"/>
+ 	<http pattern="/test*" security="none"/>
+ 	<http pattern="/forms/**" security="none"/>
+ 	<http pattern="/*" security="none"/>
+ 	
+ 	<http pattern="/login*" security="none"/>
+ 	<http pattern="/deny*" security="none"/>
+ 	<http pattern="/css/**" security="none"/>
+ 	<http pattern="/fonts/**" security="none"/>
+ 	<http pattern="/fancybox/**" security="none"/>
+ 	<http pattern="/images/**" security="none"/>
+ 	<http pattern="/js/**" security="none"/>
+ 	<http pattern="/pdf-templates/**" security="none"/>
+ 	
+ 	
+ 	<!-- Lock down all other pages -->
+ 	<http auto-config="false" use-expressions="true">
+    	<intercept-url pattern="/**" access="hasRole('ROLE_JADS')"/>
+    	
+    	<!-- Form Based Authentication -->
+    	<form-login login-page="/login.html" default-target-url="/index.html" authentication-failure-url="/deny.html"/>
+    	<logout logout-success-url="/logout.html"/>
+    	
+    	<!-- Spring security headers -->
+    	<headers>
+	        <cache-control />
+	        <content-type-options />
+	        <hsts />
+	        <frame-options policy="SAMEORIGIN" /> <!-- we use iframes within our own pages -->
+	        <xss-protection />
+	        
+	        <!-- Tell IE to always use the most current version -->
+	        <header name="X-UA-Compatible" value="IE=edge"/>
+    	</headers>
+	</http>
+ 
+	<!--
+	For hardcoded users
+	-->
+	<authentication-manager>
+	  <authentication-provider>
+	    <user-service>
+			<user name="test" password="test" authorities="ROLE_JADS" />
+	    </user-service>
+	  </authentication-provider>
+	</authentication-manager>
+</beans:beans>

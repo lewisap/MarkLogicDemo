@@ -1,0 +1,217 @@
+/* Copyright 2011-2014 MarkLogic Corporation. All Rights Reserved. */
+#globalnav {
+	height:36px;
+	width:100%;
+	background: url("../images/universal-header/bg-navbar.png") repeat-x scroll 0 0 black;
+	min-width:958px;
+}
+
+#globalnav.rounded {
+	border-radius:10px;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+}
+
+#globalnav img {
+	border:0px;
+}
+
+#globalnav .navlogo {
+	float:left;
+	padding:6px 15px 0 17px;
+	border-right: 1px solid black;
+	height:24px;
+}
+
+#globalnav .nav-link {
+	float:left;
+    height:36px;
+	border-left:1px solid #5d5d5d;
+	border-right:1px solid #000;
+}
+
+
+#globalnav .nav-link a {
+	display:inline-block;
+	padding:0 9px;
+	color:#dddddd;
+	text-decoration:none;
+    height:36px;
+    vertical-align:middle;
+    outline:0;
+}
+
+/*
+#globalnav .nav-link a {
+	display:inline-block;
+	padding:9px 10px 7px 10px;
+	color:#dddddd;
+	text-decoration:none;
+    height:20px;
+    outline:0;
+}
+
+html>body #globalnav .nav-link a { padding-top:10px; }
+*/
+
+#globalnav .nav-link span {
+	display:inline-block;
+	font-family:Helvetica, Arial, sans-serif;
+	color:#dddddd;
+	text-decoration:none;
+	font-weight:bold;
+	font-size:11px;
+	line-height:14px;
+	margin-top:12px;
+}
+#globalnav .nav-link span.icon {
+	width:16px;
+	height:16px;
+	background-repeat:no-repeat;
+	padding-right:4px;
+	margin:-4px 0;
+}
+#globalnav .nav-link span.name {
+	cursor:pointer;
+}
+
+#globalnav .nav-link-end {
+	float:left;
+	height:36px;
+    width:1px;
+	border-left:1px solid #5d5d5d;
+}
+
+#globalnav .username {
+	float:right;	
+	margin:18px 20px 0 0;	
+}
+#globalnav .username p {
+	margin:0;
+	padding:0;
+	color:#dddddd;
+	text-align:right;
+	font-size:11px;
+}
+	
+#globalnav .appservices span.icon {
+	background-image:url("../images/universal-header/monitor.png");
+}
+
+#globalnav .infostudio span.icon {
+	background-image:url("../images/universal-header/info-studio.png");
+}
+
+#globalnav .appbuilder span.icon {
+	background-image:url("../images/universal-header/app-builder.png");
+}
+
+#globalnav .queryconsole span.icon {
+	background-image:url("../images/universal-header/terminal.png");
+}
+
+#globalnav .dashboard span.icon {
+	background-image:url("../images/universal-header/systemmonitor.png");
+}
+
+#globalnav .configuration span.icon {
+	background-image:url("../images/universal-header/gear.png");
+}
+
+#globalnav .packaging span.icon {
+	background-image:url("../images/universal-header/box.png");
+}
+
+#globalnav .admin span.icon {
+	background-image:url("../images/universal-header/admin.png");	
+}
+
+#globalnav .selected {
+	background-image:url("../images/universal-header/bg-navbar-active.png");
+}
+#globalnav .selected a {
+	color:white;
+}
+
+#globalnav .nav-info {
+	display:none;
+	float:right;	
+	padding:4px 20px 0 5px;
+}
+#globalnav .nav-info .welcome {
+	padding-right:6px;
+}
+
+#globalnav .nav-info p { 
+    padding-top:8px; 
+    vertical-align:middle;
+    line-height:16px;
+    font-size:11px;
+} 
+#globalnav .nav-info a { 
+    text-decoration:none;
+    color:#fff;
+}
+
+#globalnav .nav-info span { 
+    color:#fff;
+    background:none;
+}
+#globalnav .nav-info img { 
+    padding:0 2px; 
+    margin:-3px 0px;
+}
+
+/* Style adjustments for Dashboard drop-down menu */
+
+#globalnav .nav-link.dashboard {
+    padding: 0;
+}
+
+#globalnav .nav-toplink {
+    width: 97px;
+    padding: 0 9px;
+}
+
+#globalnav .nav-sublinks {
+	position: relative;
+	top: 9px;
+    height: 62px;
+    width: 113px;
+    border-left: 1px solid #5d5d5d;
+    border-right: 1px solid #000;
+    display: none;
+    z-index: 100;
+}
+
+#globalnav .nav-sublink {
+	background-color: #333333;
+    padding: 8px 0 0 30px;
+    border-bottom: 1px solid #444444;
+	height: 22px;
+}
+
+#globalnav .nav-sublink a {
+	font-size: 11px;
+    font-weight: bold;
+    color: #cccccc;
+    padding: 0 0;
+    text-decoration:none;
+}
+
+#globalnav .nav-sublink a:hover {
+    color: #dddddd;
+}
+
+#globalnav .nav-sublink a:active {
+    color: #eeeeee;
+}
+
+#globalnav .nav-link span.icon.menu {
+    padding: 0;
+    background-image: url("../images/universal-header/menu.png");
+}
+
+#globalnav .dashboard span.icon {
+    cursor: pointer;
+}

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html ng-app="consumeApp">
+<head>
+
+<title>Data Consumer Page</title>
+<link type="text/css" rel="stylesheet" href="css/bootstrap-flatly.min.css" />
+<link type="text/css" rel="stylesheet" href="demo.css" />
+
+<script type="text/javascript" src="js/angular.min.js"></script>
+<script type="text/javascript" src="js/ui-bootstrap-tpls-0.11.0.min.js"></script>
+
+<script type="text/javascript" src="js/controllers/consume-controller.js"></script>
+
+<style>
+.nav,.pagination,.carousel,.panel-title a {cursor: pointer;}
+</style>
+</head>
+
+<body ng-controller="SearchCtrl">
+	<script type="text/ng-template" id="modalContent.html">
+        <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">x</button>
+            <h3 class="modal-title">Edit Person</h3>
+        </div>
+        <div class="modal-body">
+			<div class="container">
+				<ul class="nav nav-pills nav-stacked col-md-2">
+					<li ng-class="{'active':step==1}" ng-click="setStep(1)"><a href="#">Name</a></li>
+					<li ng-class="{'active':step==2}" ng-click="setStep(2)"><a href="#">Address</a></li>
+					<li ng-class="{'active':step==3}" ng-click="setStep(3)"><a href="#">Employer</a></li>
+				</ul>
+				<form name="form.editPerson">
+					<div class="tab-content col-md-7" ng-show="step == 1">
+						<div class="form-horizontal" ng-form='step1form'>
+							<div class="form-group">
+								<label for="personName" class="col-md-2 control-label">Name</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="personName" placeholder="Name" ng-model="editPerson.name" required>
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="email" class="col-md-2 control-label">Email</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="email" placeholder="E-Mail" ng-model="editPerson.email" required>
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="phone" class="col-md-2 control-label">Phone</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="phone" placeholder="Phone" ng-model="editPerson.phone" required>
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="username" class="col-md-2 control-label">Username</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="username" placeholder="Username" ng-model="editPerson.username" required>
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="site" class="col-md-2 control-label">Website</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="site" placeholder="Website" ng-model="editPerson.website" required>
+   	   							</div>
+  							</div>
+						</div>
+					</div>
+					<div class="tab-content col-md-7" ng-show="step == 2">
+						<div class="form-horizontal" ng-form='step2form'>
+							<div class="form-group">
+								<label for="city" class="col-md-2 control-label">City</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="city" placeholder="Name" ng-model="editPerson.address.city" required>
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="streetA" class="col-md-2 control-label">Street</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="streetA" placeholder="Street" ng-model="editPerson.address.streetA" required>
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="streetB" class="col-md-2 control-label"></label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="streetB" placeholder="" ng-model="editPerson.address.streetB">
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="streetC" class="col-md-2 control-label"></label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="streetC" placeholder="" ng-model="editPerson.address.streetC">
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="streetD" class="col-md-2 control-label"></label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="streetD" placeholder="" ng-model="editPerson.address.streetD">
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="country" class="col-md-2 control-label">State</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" typeahead="state for state in states | filter:$viewValue | limitTo:10" id="country" placeholder="State" ng-model="editPerson.address.state" required>
+   	   							</div>
+  							</div>
+						</div>
+					</div>
+					<div class="tab-content col-md-7" ng-show="step == 3">
+						<div class="form-horizontal" ng-form='step3form'>
+							<div class="form-group">
+								<label for="companyName" class="col-md-2 control-label">Name</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="companyName" placeholder="Name" ng-model="editPerson.company.companyName" required>
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="phrase" class="col-md-2 control-label">Catch Phrase</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="phrase" placeholder="Catch Phrase" ng-model="editPerson.company.catchPhrase" required>
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="bs" class="col-md-2 control-label">Mission Statement</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="bs" placeholder="Mission Statement" ng-model="editPerson.company.bs" required>
+   	   							</div>
+  							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+        </div>
+        <div class="modal-footer">
+			<button class="btn btn-primary" ng-click="previous()" ng-show="step > 1" >Prev</button>
+			<button class="btn btn-primary" ng-click="next()" ng-show="step < 3" ng-disabled="form.editPerson.step1form.$invalid">Next</button>
+            <button class="btn btn-success" ng-click="save()" ng-show="step == 3" ng-disabled="form.editPerson.$invalid">Save</button>
+            <button style="display:none;" class="btn btn-default" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+    
+	<div class="container">
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="navbar-header">
+				<!-- note the ng-init and ng-click here: -->
+				<button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+					<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+					<span class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">MarkLogic JAVA Demo</a>
+				
+				<ul class="nav navbar-nav">
+					<li><a href="ingest.html">Ingestor</a></li>
+					<li class="active"><a href="consume.html">Consumer</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="col-med-6" style="display:none;">
+			<button type="button" class="btn btn-danger btn-sm" ng-click="setQueryOptions()">Set Query Options</button>
+			<button type="button" class="btn btn-danger btn-sm" ng-click="getCompanies()">Test Facets</button>
+		</div>
+		
+		<alert ng-repeat="alert in alerts" type="{{alert.type}}"
+			close="closeAlert($index)">{{alert.msg}}</alert>
+	
+		<div class="jumbotron">
+        	<h1>Person Consumer</h1>
+        	<p>This example is a quick exercise to search one or more <b><i>fake</i></b> Person records, and allow the edit their records</p> 
+		</div>
+	
+		<div class="panel panel-primary">
+			<div class="panel-body">
+				<div class="col-lg-7">
+					<label for="input-search">Search</label>
+					<input type="text" class="form-control" id="input-search" placeholder="Enter Search Criteria" ng-model="searchCriteria" ng-debounce="1000" ng-change="search()"/>
+				</div>
+				<div class="col-md-2">
+					<label for="company-select">Company Filter</label>
+					<select class="form-control" id="company-select" ng-model="companyFilter" ng-options="company for company in companies" ng-change="search()">
+						<option value=""></option>
+					</select>
+				</div>
+				<div class="col-md-2">
+					<label for="country-select">States Filter</label>
+					<select class="form-control" id="state-select" ng-model="stateFilter" ng-options="state for state in states" ng-change="search()">
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<h4>Total Results:  {{totalResults}}</h4>
+		
+		<div class="well" ng-show="summaries.length > 0">
+			<ul class="list-group">
+				<li ng-repeat="summary in summaries" class="list-group-item">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+    						<h4 class="panel-title">{{summary.uri}}</h4>
+  						</div>
+  						<div class="panel-body">
+  							<p>{{summary.firstSnippetText}}
+    						<div style="float:right;">
+    							<button type="button" class="btn btn-info btn-sm" ng-click="edit(summary.uri)">
+  									<span class="glyphicon glyphicon-pencil"></span>
+								</button>
+    							<button type="button" class="btn btn-danger btn-sm" ng-click="remove(summary.uri, $index)">
+  									<span class="glyphicon glyphicon-remove-sign"></span>
+								</button>
+    						</div>
+  						</div>
+					</div>
+				</li>
+			</ul>
+			
+			<div ng-show="totalResults > 5" class="align-center">
+  				<pagination direction-links="false" 
+  						boundary-links="true" 
+  						items-per-page="5" 
+  						total-items="totalResults" 
+  						ng-model="currentPage"
+  						max-size="10"
+  						rotate="false"
+  						ng-change="pageChanged()">
+  				</pagination>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
