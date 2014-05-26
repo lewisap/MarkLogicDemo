@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.alewis.database.base.HelperBase;
 import org.alewis.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,88 +16,24 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marklogic.client.DatabaseClient;
-import com.marklogic.client.DatabaseClientFactory;
-import com.marklogic.client.DatabaseClientFactory.Authentication;
-import com.marklogic.client.admin.QueryOptionsManager;
-import com.marklogic.client.admin.config.QueryOptions;
-import com.marklogic.client.admin.config.QueryOptionsBuilder;
 import com.marklogic.client.document.GenericDocumentManager;
 import com.marklogic.client.document.JSONDocumentManager;
 import com.marklogic.client.io.DocumentMetadataHandle;
-import com.marklogic.client.io.QueryOptionsHandle;
 import com.marklogic.client.io.QueryOptionsListHandle;
 import com.marklogic.client.io.SearchHandle;
 import com.marklogic.client.io.StringHandle;
 import com.marklogic.client.io.ValuesHandle;
 import com.marklogic.client.query.CountedDistinctValue;
+import com.marklogic.client.query.FacetResult;
+import com.marklogic.client.query.FacetValue;
 import com.marklogic.client.query.MatchDocumentSummary;
 import com.marklogic.client.query.QueryManager;
 import com.marklogic.client.query.StringQueryDefinition;
 import com.marklogic.client.query.ValuesDefinition;
 
-@SuppressWarnings("deprecation")
 @Component
-public class DatabaseHelper {
-	private static final Logger logger = LoggerFactory.getLogger(DatabaseHelper.class);
-	private static int PAGE_SIZE = 5;
-
-	//54.86.23.55
-	private String 	hostname = "localhost";		//DemoRestServer
-	private Integer 	port = 8003;
-	private String 	username = "root";
-	private String 	password = "qwerty";
-
-	private DatabaseClient client = null;
-
-	public String getHostname() {
-		return hostname;
-	}
-
-	public void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
-
-	public Integer getPort() {
-		return port;
-	}
-
-	public void setPort(Integer port) {
-		this.port = port;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	private DatabaseClient getClient() {
-		if (client == null) {
-			client = DatabaseClientFactory.newClient(hostname, port, username, password, Authentication.DIGEST);
-		}
-
-		return client;
-	}
-
-	private void setClient(DatabaseClient client) {
-		this.client = client;
-	}
-
-	public void closeConnection() {
-		getClient().release();
-		setClient(null);
-	}
+public class SearchHelper extends HelperBase {
+	private static final Logger logger = LoggerFactory.getLogger(SearchHelper.class);
 
 	public JSONDocumentManager getNewJSONDocumentManager() {
 		// Get a new JSON Document Manager
@@ -110,6 +47,8 @@ public class DatabaseHelper {
 		StringHandle handle = new StringHandle();
 		
 		docMgr.read(uri, handle);
+		
+		closeConnection();
 
 		return handle.get();
 	}
@@ -152,39 +91,20 @@ public class DatabaseHelper {
 		closeConnection();
 	}
 
-	public List<MatchDocumentSummary> searchPeople(String criteria, String companyFilter, String stateFilter, Integer page) 
+	public List<MatchDocumentSummary> getAllPeople(String criteria, Integer page) 
 													throws JsonParseException, JsonMappingException, IOException {
 		int start;
 
 		if (page != null) {
-			start = PAGE_SIZE * (page - 1) + 1;
+			start = Constants.PAGE_SIZE * (page - 1) + 1;
 		} else {
 			start = 1;
 		}
 		
-		// TODO gotta start figuring out how to use other queries to constrain the results
-		// check evernote for the hint
-
 		QueryManager queryMgr = getClient().newQueryManager();
-		queryMgr.setPageLength(PAGE_SIZE);
+		queryMgr.setPageLength(Constants.PAGE_SIZE);
 
-		StringQueryDefinition query = null;
-		
-		if (companyFilter == null) companyFilter = "";
-		if (stateFilter == null) stateFilter = "";
-		
-		if (!companyFilter.equals("") && !stateFilter.equals("")) {
-			System.out.println("USING statesAndCompanies");
-			query = queryMgr.newStringDefinition("statesAndCompanies");
-		} else if (!companyFilter.equals("")) {
-			System.out.println("USING companies");
-			query = queryMgr.newStringDefinition("companies");
-		} else if (!stateFilter.equals("")) {
-			System.out.println("USING states");
-			query = queryMgr.newStringDefinition("states");
-		} else {
-			query = queryMgr.newStringDefinition();
-		}
+		StringQueryDefinition query = queryMgr.newStringDefinition();
 		
 		query.setCriteria(criteria);
 		query.setCollections("people");
@@ -269,8 +189,6 @@ public class DatabaseHelper {
 		return states;
 	}
 	
-	
-	
 	public void showQueryOptions() {
 		QueryManager queryMgr = getClient().newQueryManager();
 		QueryOptionsListHandle listHandle = new QueryOptionsListHandle();
@@ -284,43 +202,26 @@ public class DatabaseHelper {
 		closeConnection();
 	}
 	
-	public void setQueryOptions() {
-		QueryOptionsManager optMgr = getClient().newServerConfigManager().newQueryOptionsManager();
-		//optMgr.deleteOptions("companies");
-		
-		QueryOptionsBuilder optBldr = new QueryOptionsBuilder();
+	public void getFacetedSearchResults(String criteria, Integer page) {
+		int start;
 
-		// expose the "companyName" JSON key range index as "companyName" values
-		QueryOptionsHandle optHandle = new QueryOptionsHandle().withValues(
-				optBldr.values("companyName",
-						optBldr.range(
-								optBldr.jsonRangeIndex("companyName",
-										optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION))), "frequency-order"));
-		 
-		// write the query options to the database
-		optMgr.writeOptions("companies", optHandle);
+		if (page != null) {
+			start = Constants.PAGE_SIZE * (page - 1) + 1;
+		} else {
+			start = 1;
+		}
+		QueryManager queryMgr = getClient().newQueryManager();
 		
-		optHandle = new QueryOptionsHandle().withValues(
-				optBldr.values("state",
-						optBldr.range(
-								optBldr.jsonRangeIndex("state",
-										optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION))), "frequency-order"));
+		StringQueryDefinition stringQry = queryMgr.newStringDefinition("facets");
+		stringQry.setCriteria(criteria);
+
+		SearchHandle searchHandle = queryMgr.search(stringQry, new SearchHandle(), start);
 		
-		optMgr.writeOptions("states", optHandle);
-		
-		optHandle = new QueryOptionsHandle().withValues(
-				optBldr.values("state",
-						optBldr.range(
-								optBldr.jsonRangeIndex("state",
-										optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION))), "frequency-order"),
-				optBldr.values("companyName",
-						optBldr.range(
-								optBldr.jsonRangeIndex("companyName",
-										optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION))), "frequency-order")
-		);
-		
-		optMgr.writeOptions("statesAndCompanies", optHandle);
-		
-		closeConnection();
+		for (FacetResult facet: searchHandle.getFacetResults()) {
+			System.out.println("facet: "+facet.getName());
+			for (FacetValue value: facet.getFacetValues()) {
+				System.out.println("    "+value.getLabel()+" = "+value.getCount());
+			}
+		}
 	}
 }

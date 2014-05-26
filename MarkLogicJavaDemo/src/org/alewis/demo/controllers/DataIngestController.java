@@ -2,7 +2,8 @@ package org.alewis.demo.controllers;
 
 import java.util.List;
 
-import org.alewis.database.DatabaseHelper;
+import org.alewis.database.AdminHelper;
+import org.alewis.database.SearchHelper;
 import org.alewis.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,8 @@ import com.marklogic.client.query.MatchDocumentSummary;
 public class DataIngestController {
 	private static final Logger logger = LoggerFactory.getLogger(DataIngestController.class);
 	
-	@Autowired private DatabaseHelper dbHelper;
+	@Autowired private SearchHelper userHelper;
+	@Autowired private AdminHelper adminHelper;
 	
 	/**
 	 * 
@@ -33,9 +35,9 @@ public class DataIngestController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "getPeople")
-	public List<MatchDocumentSummary> searchPeople(String criteria, String companyFilter, String stateFilter, Integer page) throws Exception {
-		System.out.println(criteria + " | " + companyFilter + " | " + stateFilter);
-		return dbHelper.searchPeople(criteria, companyFilter, stateFilter, page);
+	public List<MatchDocumentSummary> searchPeople(String criteria, Integer page) throws Exception {
+		System.out.println(criteria);
+		return userHelper.getAllPeople(criteria, page);
 	}
 	
 	/**
@@ -46,29 +48,40 @@ public class DataIngestController {
 	@RequestMapping(value = "deletePerson", method = RequestMethod.POST)
 	public void deletePerson(@RequestBody String uri) throws Exception {
 		logger.debug("URI = " + uri);
-		dbHelper.deletePerson(uri);
+		userHelper.deletePerson(uri);
 	}
 	
 	@RequestMapping(value = "updatePerson", method = RequestMethod.POST)
 	public void updatePerson(@RequestBody Person person) throws Exception {
 		logger.debug(person.toString() + " | " + person.getUri());
-		dbHelper.updatePerson(person.getUri(), person);
+		userHelper.updatePerson(person.getUri(), person);
 	}
 	
 	@RequestMapping(value = "setQueryOptions", method = RequestMethod.POST)
 	public void setQueryOptions() throws Exception {
-		dbHelper.setQueryOptions();
-		dbHelper.showQueryOptions();
+		adminHelper.setQueryOptions();
+		userHelper.showQueryOptions();
+	}
+	
+	@RequestMapping(value = "clearQueryOptions", method = RequestMethod.POST)
+	public void clearQueryOptions() throws Exception {
+		adminHelper.clearQueryOptions();
+		userHelper.showQueryOptions();
 	}
 	
 	@RequestMapping(value = "getCompanies", method = RequestMethod.GET)
 	public List<String> getCompanies() throws Exception {
-		return dbHelper.getCompanyList();
+		return userHelper.getCompanyList();
 	}
 	
 	@RequestMapping(value = "getStates", method = RequestMethod.GET)
 	public List<String> getStates() throws Exception {
-		return dbHelper.getStateList();
+		return userHelper.getStateList();
+	}
+	
+	@RequestMapping(value = "getFacetedResults", method = RequestMethod.GET)
+	public void getFacetedResults(String criteria, Integer page) throws Exception {
+		userHelper.getFacetedSearchResults(criteria, page);
 	}
 	
 	/**
@@ -80,7 +93,7 @@ public class DataIngestController {
 	@RequestMapping(value = "getTotalResults")
 	public Long getTotalResults(String criteria) throws Exception {
 		logger.debug(criteria);
-		return dbHelper.getTotalResults(criteria);
+		return userHelper.getTotalResults(criteria);
 	}
 	
 	/**
@@ -92,7 +105,7 @@ public class DataIngestController {
 	@RequestMapping(value = "retrievePerson")
 	public String retrievePerson(String uri) throws Exception {
 		logger.debug(uri);
-		return dbHelper.retrievePersonAsJSON(uri);
+		return userHelper.retrievePersonAsJSON(uri);
 	}
 	
 	/**
@@ -109,12 +122,12 @@ public class DataIngestController {
 		 * pass in a Person object and tell the controller method that is should
 		 * be built from the request body (@RequestBody) - uses Jackson by default if found on classpath
 		 */
-		dbHelper.writePeople(people);
+		userHelper.writePeople(people);
 	}
 	
 	@SuppressWarnings("unused")
 	private void writePerson(Person person) throws JsonProcessingException {
-		JSONDocumentManager doc = dbHelper.getNewJSONDocumentManager();
+		JSONDocumentManager doc = userHelper.getNewJSONDocumentManager();
 		
 		// assign the people to the 'people' collection
 		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
@@ -126,6 +139,6 @@ public class DataIngestController {
 		
 		// Create or update a JSON document
 		doc.write("people/" + person.getName().replaceAll("\\s",""), metadata, new StringHandle(json));
-		dbHelper.closeConnection();
+		userHelper.closeConnection();
 	}
 }

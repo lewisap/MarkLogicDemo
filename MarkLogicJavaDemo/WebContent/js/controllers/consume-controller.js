@@ -9,8 +9,16 @@ consumeApp.factory('searchService', function($http) {
 				return data;
 			});
 		},
-		getPeople : function(criteria, companyFilter, stateFilter, page) {
-			return $http.get('getPeople', {params: { criteria: criteria, companyFilter: companyFilter, stateFilter: stateFilter, page:page }
+		getPeople : function(criteria, page) {
+			return $http.get('getPeople', {params: { criteria: criteria, page:page }
+			}).success(function(data, status, headers, config) {
+				return data;
+			}).error(function(data, status, headers, config) {
+				return data;
+			});
+		},
+		getFacetedResults : function(criteria, page) {
+			return $http.get('getFacetedResults', {params: { criteria: criteria, page:page }
 			}).success(function(data, status, headers, config) {
 				return data;
 			}).error(function(data, status, headers, config) {
@@ -42,6 +50,13 @@ consumeApp.factory('searchService', function($http) {
 		},
 		setQueryOptions : function() {
 			return $http.post('setQueryOptions').success(function(data, status, headers, config) {
+				return data;
+			}).error(function(data, status, headers, config) {
+				return data;
+			});
+		},
+		clearQueryOptions : function() {
+			return $http.post('clearQueryOptions').success(function(data, status, headers, config) {
 				return data;
 			}).error(function(data, status, headers, config) {
 				return data;
@@ -116,6 +131,14 @@ consumeApp.controller('SearchCtrl', function($scope, searchService, $q, $log, $m
 	
 	$scope.setQueryOptions = function() {
 		searchService.setQueryOptions();
+	};
+	
+	$scope.clearQueryOptions = function() {
+		searchService.clearQueryOptions();
+	};
+	
+	$scope.getFacetedResults = function() {
+		searchService.getFacetedResults($scope.searchCriteria, 1);
 	};
 	
 	$scope.getStates = function() {

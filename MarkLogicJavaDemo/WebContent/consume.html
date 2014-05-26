@@ -154,9 +154,10 @@
 			</div>
 		</nav>
 		
-		<div class="col-med-6" style="display:none;">
+		<div class="col-med-6">
 			<button type="button" class="btn btn-danger btn-sm" ng-click="setQueryOptions()">Set Query Options</button>
-			<button type="button" class="btn btn-danger btn-sm" ng-click="getCompanies()">Test Facets</button>
+			<button type="button" class="btn btn-danger btn-sm" ng-click="clearQueryOptions()">Clear Query Options</button>
+			<button type="button" class="btn btn-danger btn-sm" ng-click="getFacetedResults()">Test Facets</button>
 		</div>
 		
 		<alert ng-repeat="alert in alerts" type="{{alert.type}}"
