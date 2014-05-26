@@ -138,7 +138,16 @@ consumeApp.controller('SearchCtrl', function($scope, searchService, $q, $log, $m
 	};
 	
 	$scope.getFacetedResults = function() {
-		searchService.getFacetedResults($scope.searchCriteria, 1);
+		var promises = [];
+		promises.push(searchService.getFacetedResults($scope.searchCriteria, 1));  //TODO is page applicable here?
+		
+		$q.all(promises).then(function success(value) {
+			$log.info(value[0].data);
+//			var statesList = value[0].data;
+//			for (var i = 0; i < statesList.length; i++) {
+//				$scope.states.push(statesList[i]);
+//			}
+		});
 	};
 	
 	$scope.getStates = function() {

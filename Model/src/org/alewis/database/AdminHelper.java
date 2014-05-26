@@ -2,8 +2,6 @@ package org.alewis.database;
 
 import java.util.Map;
 
-import javax.xml.namespace.QName;
-
 import org.alewis.database.base.HelperBase;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +14,7 @@ import com.marklogic.client.io.QueryOptionsHandle;
 import com.marklogic.client.io.QueryOptionsListHandle;
 import com.marklogic.client.query.QueryManager;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({ "deprecation" })
 @Component
 public class AdminHelper extends HelperBase {
 	
@@ -80,7 +78,7 @@ public class AdminHelper extends HelperBase {
 		
 		optMgr.writeOptions("people", optHandle);
 		
-		// facet to get stuff?? TODO
+		// facet that ties the person name, company name, and state together
 		optHandle.withConstraints(
 		        optBldr.constraint("name",
 		                optBldr.range(

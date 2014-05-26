@@ -1,6 +1,7 @@
 package org.alewis.demo.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.alewis.database.AdminHelper;
 import org.alewis.database.SearchHelper;
@@ -80,8 +81,8 @@ public class DataIngestController {
 	}
 	
 	@RequestMapping(value = "getFacetedResults", method = RequestMethod.GET)
-	public void getFacetedResults(String criteria, Integer page) throws Exception {
-		userHelper.getFacetedSearchResults(criteria, page);
+	public Map<String, Object[]> getFacetedResults(String criteria, Integer page) throws Exception {
+		return userHelper.getFacetedSearchResults(criteria, page);
 	}
 	
 	/**

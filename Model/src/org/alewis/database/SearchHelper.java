@@ -3,6 +3,7 @@ package org.alewis.database;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,6 @@ import com.marklogic.client.io.StringHandle;
 import com.marklogic.client.io.ValuesHandle;
 import com.marklogic.client.query.CountedDistinctValue;
 import com.marklogic.client.query.FacetResult;
-import com.marklogic.client.query.FacetValue;
 import com.marklogic.client.query.MatchDocumentSummary;
 import com.marklogic.client.query.QueryManager;
 import com.marklogic.client.query.StringQueryDefinition;
@@ -202,7 +202,12 @@ public class SearchHelper extends HelperBase {
 		closeConnection();
 	}
 	
-	public void getFacetedSearchResults(String criteria, Integer page) {
+	/*
+	 * TODO
+	 * create a structured query once a user selets a facet to combine the facet and criteria into one query (to limit things down)
+	 */
+	public Map<String, Object[]> getFacetedSearchResults(String criteria, Integer page) {
+		Map<String, Object[]> results = new HashMap<String, Object[]>();
 		int start;
 
 		if (page != null) {
@@ -219,9 +224,17 @@ public class SearchHelper extends HelperBase {
 		
 		for (FacetResult facet: searchHandle.getFacetResults()) {
 			System.out.println("facet: "+facet.getName());
-			for (FacetValue value: facet.getFacetValues()) {
-				System.out.println("    "+value.getLabel()+" = "+value.getCount());
-			}
+			results.put(facet.getName(), facet.getFacetValues());
+//			for (FacetValue value: facet.getFacetValues()) {
+//				System.out.println("    "+value.getLabel()+" = "+value.getCount());
+//			}
 		}
+		
+//		MatchDocumentSummary[] docSummaries = searchHandle.getMatchResults();
+//		System.out.println("Listing "+docSummaries.length+" documents:\n");
+//		results.put("summaries", docSummaries);
+		closeConnection();
+	
+		return results;
 	}
 }
