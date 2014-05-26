@@ -80,9 +80,9 @@ public class DataIngestController {
 		return userHelper.getStateList();
 	}
 	
-	@RequestMapping(value = "getFacetedResults", method = RequestMethod.GET)
-	public Map<String, Object[]> getFacetedResults(String criteria, Integer page) throws Exception {
-		return userHelper.getFacetedSearchResults(criteria, page);
+	@RequestMapping(value = "getSearchFacets", method = RequestMethod.GET)
+	public Map<String, Object[]> getSearchFacets(String criteria) throws Exception {
+		return userHelper.getSearchResultFacets(criteria);
 	}
 	
 	/**

@@ -157,7 +157,7 @@
 		<div class="col-med-6">
 			<button type="button" class="btn btn-danger btn-sm" ng-click="setQueryOptions()">Set Query Options</button>
 			<button type="button" class="btn btn-danger btn-sm" ng-click="clearQueryOptions()">Clear Query Options</button>
-			<button type="button" class="btn btn-danger btn-sm" ng-click="getFacetedResults()">Test Facets</button>
+			<!-- <button type="button" class="btn btn-danger btn-sm" ng-click="getFacetedResults()">Test Facets</button> -->
 		</div>
 		
 		<alert ng-repeat="alert in alerts" type="{{alert.type}}"
@@ -174,15 +174,18 @@
 					<label for="input-search">Search</label>
 					<input type="text" class="form-control" id="input-search" placeholder="Enter Search Criteria" ng-model="searchCriteria" ng-debounce="1000" ng-change="search()"/>
 				</div>
-				<div class="col-md-2">
+				
+				<div class="col-md-2" ng-show="companies.length > 0">
 					<label for="company-select">Company Filter</label>
-					<select class="form-control" id="company-select" ng-model="companyFilter" ng-options="company for company in companies" ng-change="search()">
+					<select class="form-control" id="company-select" ng-model="companyFilter" 
+											ng-options="company.name +' (' + company.count + ')' for company in companies" ng-change="refine()">
 						<option value=""></option>
 					</select>
 				</div>
-				<div class="col-md-2">
+				<div class="col-md-2" ng-show="states.length > 0">
 					<label for="country-select">States Filter</label>
-					<select class="form-control" id="state-select" ng-model="stateFilter" ng-options="state for state in states" ng-change="search()">
+					<select class="form-control" id="state-select" ng-model="stateFilter" 
+											ng-options="state.name +' (' + state.count + ')' for state in states" ng-change="refine()">
 						<option value=""></option>
 					</select>
 				</div>

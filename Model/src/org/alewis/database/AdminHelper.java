@@ -88,7 +88,7 @@ public class AdminHelper extends HelperBase {
 		                        FragmentScope.DOCUMENTS,
 		                        null,
 		                        "frequency-order", "descending")),
-		        optBldr.constraint("companyname",
+		        optBldr.constraint("companyName",
 		                optBldr.range(
 		                        optBldr.jsonRangeIndex(("companyName"),
 		                                optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION)))),
@@ -97,7 +97,7 @@ public class AdminHelper extends HelperBase {
 		                        optBldr.jsonRangeIndex(("state"),
 		                                optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION)))));
 		optHandle.setReturnResults(false);
-		optMgr.writeOptions("facets", optHandle);
+		optMgr.writeOptions("person-companyName-state-facet", optHandle);
 		
 		closeConnection();
 	}

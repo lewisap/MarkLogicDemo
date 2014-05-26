@@ -151,6 +151,8 @@ public class SearchHelper extends HelperBase {
 		closeConnection();
 	}
 	
+	// No need for this now that facets work...
+	@Deprecated
 	public List<String> getCompanyList() {
 		List<String> companies = new ArrayList<String>();
 		
@@ -170,6 +172,8 @@ public class SearchHelper extends HelperBase {
 		return companies;
 	}
 	
+	// No need for this now that facets work...
+	@Deprecated
 	public List<String> getStateList() {
 		List<String> states = new ArrayList<String>();
 		
@@ -206,25 +210,20 @@ public class SearchHelper extends HelperBase {
 	 * TODO
 	 * create a structured query once a user selets a facet to combine the facet and criteria into one query (to limit things down)
 	 */
-	public Map<String, Object[]> getFacetedSearchResults(String criteria, Integer page) {
+	public Map<String, Object[]> getSearchResultFacets(String criteria) {
 		Map<String, Object[]> results = new HashMap<String, Object[]>();
-		int start;
-
-		if (page != null) {
-			start = Constants.PAGE_SIZE * (page - 1) + 1;
-		} else {
-			start = 1;
-		}
 		QueryManager queryMgr = getClient().newQueryManager();
 		
-		StringQueryDefinition stringQry = queryMgr.newStringDefinition("facets");
+		StringQueryDefinition stringQry = queryMgr.newStringDefinition("person-companyName-state-facet");
 		stringQry.setCriteria(criteria);
 
-		SearchHandle searchHandle = queryMgr.search(stringQry, new SearchHandle(), start);
+		SearchHandle searchHandle = queryMgr.search(stringQry, new SearchHandle());
 		
 		for (FacetResult facet: searchHandle.getFacetResults()) {
-			System.out.println("facet: "+facet.getName());
-			results.put(facet.getName(), facet.getFacetValues());
+//			System.out.println("facet: "+facet.getName());
+			if (!facet.getName().equalsIgnoreCase("name")) {
+				results.put(facet.getName(), facet.getFacetValues());
+			}
 //			for (FacetValue value: facet.getFacetValues()) {
 //				System.out.println("    "+value.getLabel()+" = "+value.getCount());
 //			}

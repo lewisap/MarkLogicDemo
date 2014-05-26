@@ -17,14 +17,6 @@ consumeApp.factory('searchService', function($http) {
 				return data;
 			});
 		},
-		getFacetedResults : function(criteria, page) {
-			return $http.get('getFacetedResults', {params: { criteria: criteria, page:page }
-			}).success(function(data, status, headers, config) {
-				return data;
-			}).error(function(data, status, headers, config) {
-				return data;
-			});
-		},
 		getTotalResults : function(criteria) {
 			return $http.get('getTotalResults', {params: { criteria: criteria }
 			}).success(function(data, status, headers, config) {
@@ -62,15 +54,9 @@ consumeApp.factory('searchService', function($http) {
 				return data;
 			});
 		},
-		getCompanies : function() {
-			return $http.get('getCompanies').success(function(data, status, headers, config) {
-				return data;
-			}).error(function(data, status, headers, config) {
-				return data;
-			});
-		},
-		getStates : function() {
-			return $http.get('getStates').success(function(data, status, headers, config) {
+		getSearchFacets : function(criteria) {
+			return $http.get('getSearchFacets', {params: { criteria: criteria }
+			}).success(function(data, status, headers, config) {
 				return data;
 			}).error(function(data, status, headers, config) {
 				return data;
@@ -137,44 +123,44 @@ consumeApp.controller('SearchCtrl', function($scope, searchService, $q, $log, $m
 		searchService.clearQueryOptions();
 	};
 	
-	$scope.getFacetedResults = function() {
-		var promises = [];
-		promises.push(searchService.getFacetedResults($scope.searchCriteria, 1));  //TODO is page applicable here?
-		
-		$q.all(promises).then(function success(value) {
-			$log.info(value[0].data);
+//	$scope.getSearchFacets = function() {
+//		var promises = [];
+//		promises.push(searchService.getFacetedResults($scope.searchCriteria));  //TODO is page applicable here?
+//		
+//		$q.all(promises).then(function success(value) {
+//			$log.info(value[0].data);
+////			var statesList = value[0].data;
+////			for (var i = 0; i < statesList.length; i++) {
+////				$scope.states.push(statesList[i]);
+////			}
+//		});
+//	};
+	
+//	$scope.getStates = function() {
+//		var promises = [];
+//		$scope.companies = [];
+//		promises.push(searchService.getStates());
+//		
+//		$q.all(promises).then(function success(value) {
 //			var statesList = value[0].data;
 //			for (var i = 0; i < statesList.length; i++) {
 //				$scope.states.push(statesList[i]);
 //			}
-		});
-	};
-	
-	$scope.getStates = function() {
-		var promises = [];
-		$scope.companies = [];
-		promises.push(searchService.getStates());
-		
-		$q.all(promises).then(function success(value) {
-			var statesList = value[0].data;
-			for (var i = 0; i < statesList.length; i++) {
-				$scope.states.push(statesList[i]);
-			}
-		});
-	};
-	
-	$scope.getCompanies = function() {
-		var promises = [];
-		$scope.companies = [];
-		promises.push(searchService.getCompanies());
-		
-		$q.all(promises).then(function success(value) {
-			var companyList = value[0].data;
-			for (var i = 0; i < companyList.length; i++) {
-				$scope.companies.push(companyList[i]);
-			}
-		});
-	};
+//		});
+//	};
+//	
+//	$scope.getCompanies = function() {
+//		var promises = [];
+//		$scope.companies = [];
+//		promises.push(searchService.getCompanies());
+//		
+//		$q.all(promises).then(function success(value) {
+//			var companyList = value[0].data;
+//			for (var i = 0; i < companyList.length; i++) {
+//				$scope.companies.push(companyList[i]);
+//			}
+//		});
+//	};
 	
 	$scope.edit = function (uri) {
 		var promises = [];
@@ -244,29 +230,39 @@ consumeApp.controller('SearchCtrl', function($scope, searchService, $q, $log, $m
 		$scope.search($scope.currentPage);
 	};
 	
+	$scope.refine = function() {
+		alert('placeholder for now');
+	};
+	
 	$scope.search = function(page) {
 		$scope.summaries = [];
+		$scope.states = [];
+		$scope.companies = [];
+		
 		var promises = [];
 		
+		// fire off the AJAX queries
 		promises.push(searchService.getPeople(	$scope.searchCriteria,
-												$scope.companyFilter,
-												$scope.stateFilter,
 												page));
 		promises.push(searchService.getTotalResults($scope.searchCriteria));
+		promises.push(searchService.getSearchFacets($scope.searchCriteria));
 		
 		$q.all(promises).then(function success(value) {
-			angular.forEach(value[0].data, function(v, k){
-				//$log.info(v);
-				$scope.summaries.push(v);
-			});
+			// value[0] = getPeople return
+			$scope.summaries = value[0].data;
+
+			// value[1] = getTotalResults return
 			$scope.totalResults = value[1].data;
+			
+			// value[2] = getSearchFacets return
+			$log.info(value[2].data);
+			$scope.companies = value[2].data.companyName;
+			$scope.states = value[2].data.state;
 		});
 	};
 	
-	// do the initial searh
+	// do the initial search
 	$scope.pageChanged();
-	$scope.getCompanies();
-	$scope.getStates();
 });
 
 var ModalInstanceCtrl = function ($scope, $modalInstance, searchService, $q, $log, person, uri) {
