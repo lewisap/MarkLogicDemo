@@ -242,11 +242,11 @@ Faker.Company.companyName = function (format) {
         case 6:
         	return "Google";
         case 7:
-        	return "Northrop Grumman";
+        	return "Northrop";
         case 8:
         	return "SAIC";
         case 9:
-        	return "Lockheed Martin";
+        	return "Lockheed";
         }
     };
 

@@ -17,6 +17,30 @@ consumeApp.factory('searchService', function($http) {
 				return data;
 			});
 		},
+		getFilteredPeople : function(criteria, page, state, company) {
+			return $http.get('getFilteredPeople', {params: { criteria: criteria, page:page, state:state, company:company }
+			}).success(function(data, status, headers, config) {
+				return data;
+			}).error(function(data, status, headers, config) {
+				return data;
+			});
+		},
+		getFilteredTotalResults : function(criteria, state, company) {
+			return $http.get('getFilteredTotalResults', {params: { criteria: criteria, state:state, company:company }
+			}).success(function(data, status, headers, config) {
+				return data;
+			}).error(function(data, status, headers, config) {
+				return data;
+			});
+		},
+		getFilteredSearchFacets : function(criteria, state, company) {
+			return $http.get('getFilteredSearchFacets', {params: { criteria: criteria, state:state, company:company }
+			}).success(function(data, status, headers, config) {
+				return data;
+			}).error(function(data, status, headers, config) {
+				return data;
+			});
+		},
 		getTotalResults : function(criteria) {
 			return $http.get('getTotalResults', {params: { criteria: criteria }
 			}).success(function(data, status, headers, config) {
@@ -123,45 +147,6 @@ consumeApp.controller('SearchCtrl', function($scope, searchService, $q, $log, $m
 		searchService.clearQueryOptions();
 	};
 	
-//	$scope.getSearchFacets = function() {
-//		var promises = [];
-//		promises.push(searchService.getFacetedResults($scope.searchCriteria));  //TODO is page applicable here?
-//		
-//		$q.all(promises).then(function success(value) {
-//			$log.info(value[0].data);
-////			var statesList = value[0].data;
-////			for (var i = 0; i < statesList.length; i++) {
-////				$scope.states.push(statesList[i]);
-////			}
-//		});
-//	};
-	
-//	$scope.getStates = function() {
-//		var promises = [];
-//		$scope.companies = [];
-//		promises.push(searchService.getStates());
-//		
-//		$q.all(promises).then(function success(value) {
-//			var statesList = value[0].data;
-//			for (var i = 0; i < statesList.length; i++) {
-//				$scope.states.push(statesList[i]);
-//			}
-//		});
-//	};
-//	
-//	$scope.getCompanies = function() {
-//		var promises = [];
-//		$scope.companies = [];
-//		promises.push(searchService.getCompanies());
-//		
-//		$q.all(promises).then(function success(value) {
-//			var companyList = value[0].data;
-//			for (var i = 0; i < companyList.length; i++) {
-//				$scope.companies.push(companyList[i]);
-//			}
-//		});
-//	};
-	
 	$scope.edit = function (uri) {
 		var promises = [];
 		
@@ -211,27 +196,47 @@ consumeApp.controller('SearchCtrl', function($scope, searchService, $q, $log, $m
 		$scope.alerts.splice(index, 1);
 	};
 
-	$scope.insertPeople = function() {
-		$scope.alerts = [];
-		var promises = [];
-
-		// ajax call to the server here
-		//promises.push(ingestService.insertPerson($scope.people));
-
-		$q.all(promises).then(function success(value){
-			$scope.alerts.push({msg: 'Successfully added all people into the database', type: 'success'});
-		}, function failure(err){
-			$scope.alerts.push({msg: 'Unable to insert one or more generated people', type: 'danger'});
-		});
-	};
-	
 	// handle the page change event
 	$scope.pageChanged = function () {
-		$scope.search($scope.currentPage);
+		if ($scope.stateFilter || $scope.companyFilter) {
+			$scope.refine($scope.currentPage);
+		} else {
+			$scope.search($scope.currentPage);
+		}
 	};
 	
 	$scope.refine = function() {
-		alert('placeholder for now');
+		$scope.summaries = [];
+		
+		var promises = [];
+		
+		// fire off the AJAX queries
+		promises.push(searchService.getFilteredPeople(		$scope.searchCriteria,
+															$scope.currentPage,
+															$scope.stateFilter.name,
+															$scope.companyFilter.name));
+		
+		promises.push(searchService.getFilteredTotalResults($scope.searchCriteria,
+															$scope.stateFilter.name,
+															$scope.companyFilter.name));
+		
+//		promises.push(searchService.getFilteredSearchFacets($scope.searchCriteria,
+//															$scope.stateFilter.name,
+//															$scope.companyFilter.name));
+//		
+		$q.all(promises).then(function success(value) {
+			// value[0] = people return
+			$scope.summaries = value[0].data;
+			$log.info(value[0].data);
+
+			// value[1] = total return
+			$scope.totalResults = value[1].data;
+			
+			// value[2] = facets return
+//			$scope.companies = value[2].data.companyName;
+//			$scope.states = value[2].data.state;
+		});
+		
 	};
 	
 	$scope.search = function(page) {

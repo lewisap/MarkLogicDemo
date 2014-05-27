@@ -99,6 +99,33 @@ public class AdminHelper extends HelperBase {
 		optHandle.setReturnResults(false);
 		optMgr.writeOptions("person-companyName-state-facet", optHandle);
 		
+		// option to get all people based on Company Name
+		optHandle = new QueryOptionsHandle().withConstraints(
+				optBldr.constraint("companyName",
+						optBldr.value(
+								optBldr.jsonTermIndex("companyName"))));
+				
+		optMgr.writeOptions("peopleByCompany", optHandle);
+		
+		// option to get all people based on state
+		optHandle = new QueryOptionsHandle().withConstraints(
+				optBldr.constraint("state",
+						optBldr.value(
+								optBldr.jsonTermIndex("state"))));
+				
+		optMgr.writeOptions("peopleByState", optHandle);
+		
+		// option to get all people based on state and company name
+		optHandle = new QueryOptionsHandle().withConstraints(
+				optBldr.constraint("state",
+						optBldr.value(
+								optBldr.jsonTermIndex("state"))),
+				optBldr.constraint("companyName",
+						optBldr.value(
+								optBldr.jsonTermIndex("companyName"))));
+				
+		optMgr.writeOptions("peopleByStateAndCompany", optHandle);
+		
 		closeConnection();
 	}
 }

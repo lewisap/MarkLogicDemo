@@ -90,17 +90,21 @@ public class SearchHelper extends HelperBase {
 		
 		closeConnection();
 	}
-
-	public List<MatchDocumentSummary> getAllPeople(String criteria, Integer page) 
-													throws JsonParseException, JsonMappingException, IOException {
-		int start;
+	
+	private Integer getPageNumber(Integer page) {
+		Integer start;
 
 		if (page != null) {
 			start = Constants.PAGE_SIZE * (page - 1) + 1;
 		} else {
 			start = 1;
 		}
-		
+
+		return start;
+	}
+
+	public List<MatchDocumentSummary> getAllPeopleByCriteria(String criteria, Integer page) 
+													throws JsonParseException, JsonMappingException, IOException {
 		QueryManager queryMgr = getClient().newQueryManager();
 		queryMgr.setPageLength(Constants.PAGE_SIZE);
 
@@ -110,7 +114,7 @@ public class SearchHelper extends HelperBase {
 		query.setCollections("people");
 
 		SearchHandle resultsHandle = new SearchHandle();
-		queryMgr.search(query, resultsHandle, start);
+		queryMgr.search(query, resultsHandle, getPageNumber(page));
 
 		System.out.println("Matched " + resultsHandle.getTotalResults() + " documents with '" + query.getCriteria() + "'\n");
 
@@ -206,10 +210,6 @@ public class SearchHelper extends HelperBase {
 		closeConnection();
 	}
 	
-	/*
-	 * TODO
-	 * create a structured query once a user selets a facet to combine the facet and criteria into one query (to limit things down)
-	 */
 	public Map<String, Object[]> getSearchResultFacets(String criteria) {
 		Map<String, Object[]> results = new HashMap<String, Object[]>();
 		QueryManager queryMgr = getClient().newQueryManager();
@@ -220,18 +220,117 @@ public class SearchHelper extends HelperBase {
 		SearchHandle searchHandle = queryMgr.search(stringQry, new SearchHandle());
 		
 		for (FacetResult facet: searchHandle.getFacetResults()) {
-//			System.out.println("facet: "+facet.getName());
 			if (!facet.getName().equalsIgnoreCase("name")) {
 				results.put(facet.getName(), facet.getFacetValues());
 			}
-//			for (FacetValue value: facet.getFacetValues()) {
-//				System.out.println("    "+value.getLabel()+" = "+value.getCount());
-//			}
+		}
+		closeConnection();
+	
+		return results;
+	}
+	
+	private StringQueryDefinition buildFilteredQuery(String criteria, String state, String company, QueryManager queryMgr) {
+		boolean isStateFilter = false;
+		boolean isCompanyFilter = false;
+		
+		StringQueryDefinition query;
+		
+		if (state != null && !state.equalsIgnoreCase("")) {
+			isStateFilter = true;
 		}
 		
-//		MatchDocumentSummary[] docSummaries = searchHandle.getMatchResults();
-//		System.out.println("Listing "+docSummaries.length+" documents:\n");
-//		results.put("summaries", docSummaries);
+		if (company != null && !company.equalsIgnoreCase("")) {
+			isCompanyFilter = true;
+		}
+		
+		if (isStateFilter && isCompanyFilter) {
+			query = queryMgr.newStringDefinition("peopleByState");
+			query.setCriteria(criteria + "  companyName:" + company + " state: " + state);
+			//System.out.println(criteria + "  companyName:" + company + " state: " + state);
+			
+		} else if (isStateFilter && !isCompanyFilter) {
+			query = queryMgr.newStringDefinition("peopleByState");
+			query.setCriteria(criteria + "  state:" + state);
+			//System.out.println(criteria + "  state:" + state);
+			
+		} else if (isCompanyFilter && !isStateFilter) {
+			query = queryMgr.newStringDefinition("peopleByCompany");
+			query.setCriteria(criteria + "  companyName:" + company);
+			//System.out.println(criteria + "  companyName:" + company);
+			
+		} else {
+			query = queryMgr.newStringDefinition();
+			query.setCriteria(criteria);
+		}
+		
+		return query;
+	}
+	
+	public List<MatchDocumentSummary> getFilteredPeople(String criteria, Integer page, String state, String company) {
+		QueryManager queryMgr = getClient().newQueryManager();
+		queryMgr.setPageLength(Constants.PAGE_SIZE);
+		
+		StringQueryDefinition query = buildFilteredQuery(criteria, state, company, queryMgr);
+		SearchHandle resultsHandle = queryMgr.search(query, new SearchHandle(), getPageNumber(page));
+		
+		MatchDocumentSummary[] docSummaries = resultsHandle.getMatchResults();
+		System.out.println("Listing "+docSummaries.length+" documents:\n");
+
+		closeConnection();
+		
+		return Arrays.asList(docSummaries);
+	}
+	
+	public Long getFilteredTotalResults(String criteria, String state, String company) throws JsonParseException, JsonMappingException, IOException {
+		QueryManager queryMgr = getClient().newQueryManager();
+
+		StringQueryDefinition query = buildFilteredQuery(criteria, state, company, queryMgr);
+		SearchHandle resultsHandle = queryMgr.search(query, new SearchHandle());
+		
+		closeConnection();
+
+		return resultsHandle.getTotalResults();
+	}
+	
+	public Map<String, Object[]> getFilteredSearchResultFacets(String criteria, String state, String company) {
+		boolean isStateFilter = false;
+		boolean isCompanyFilter = false;
+		Map<String, Object[]> results = new HashMap<String, Object[]>();
+		QueryManager queryMgr = getClient().newQueryManager();
+		
+		if (state != null && !state.equalsIgnoreCase("")) {
+			isStateFilter = true;
+		}
+		
+		if (company != null && !company.equalsIgnoreCase("")) {
+			isCompanyFilter = true;
+		}
+		
+		StringQueryDefinition query = queryMgr.newStringDefinition("person-companyName-state-facet");
+		
+		if (isStateFilter && isCompanyFilter) {
+			query.setCriteria(criteria + "  companyName:" + company + " state: " + state);
+			//System.out.println(criteria + "  companyName:" + company + " state: " + state);
+			
+		} else if (isStateFilter && !isCompanyFilter) {
+			query.setCriteria(criteria + "  state:" + state);
+			//System.out.println(criteria + "  state:" + state);
+			
+		} else if (isCompanyFilter && !isStateFilter) {
+			query.setCriteria(criteria + "  companyName:" + company);
+			//System.out.println(criteria + "  companyName:" + company);
+			
+		} else {
+			query.setCriteria(criteria);
+		}
+
+		SearchHandle searchHandle = queryMgr.search(query, new SearchHandle());
+		
+		for (FacetResult facet: searchHandle.getFacetResults()) {
+			if (!facet.getName().equalsIgnoreCase("name")) {
+				results.put(facet.getName(), facet.getFacetValues());
+			}
+		}
 		closeConnection();
 	
 		return results;
