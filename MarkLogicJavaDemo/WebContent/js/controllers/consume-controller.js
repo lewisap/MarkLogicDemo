@@ -1,4 +1,4 @@
-var consumeApp = angular.module('consumeApp', ['ui.bootstrap']);
+var consumeApp = angular.module('consumeApp', ['ui.bootstrap', 'ngMap']);
 
 consumeApp.factory('searchService', function($http) {
 	return {
@@ -206,9 +206,11 @@ consumeApp.controller('SearchCtrl', function($scope, searchService, $q, $log, $m
 	};
 	
 	$scope.refine = function() {
-		$scope.summaries = [];
 		var company = null;
 		var state = null;
+		var promises = [];
+		
+		$scope.summaries = [];
 		
 		if ($scope.companyFilter && $scope.companyFilter.name) {
 			company = $scope.companyFilter.name;
@@ -217,8 +219,6 @@ consumeApp.controller('SearchCtrl', function($scope, searchService, $q, $log, $m
 		if ($scope.stateFilter && $scope.stateFilter.name) {
 			state = $scope.stateFilter.name;
 		}
-		
-		var promises = [];
 		
 		// fire off the AJAX queries
 		promises.push(searchService.getFilteredPeople(		$scope.searchCriteria,
@@ -294,6 +294,7 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, searchService, $q, $lo
 
 	// scoping issues, define a form here and in the page define the <form> as <form name="form.something"/>
 	$scope.form = {};
+	
 	
 	$scope.save = function () {
 		var promises = [];

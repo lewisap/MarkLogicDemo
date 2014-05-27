@@ -6,13 +6,18 @@
 <link type="text/css" rel="stylesheet" href="css/bootstrap-flatly.min.css" />
 <link type="text/css" rel="stylesheet" href="css/demo.css" />
 
+
 <script type="text/javascript" src="js/angular.min.js"></script>
 <script type="text/javascript" src="js/ui-bootstrap-tpls-0.11.0.min.js"></script>
+
+<script src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="js/ng-map.min.js"></script>
 
 <script type="text/javascript" src="js/controllers/consume-controller.js"></script>
 
 <style>
 .nav,.pagination,.carousel,.panel-title a {cursor: pointer;}
+.angular-google-map-container { height: 300px; width: 300px;}
 </style>
 </head>
 
@@ -28,6 +33,7 @@
 					<li ng-class="{'active':step==1}" ng-click="setStep(1)"><a href="#">Name</a></li>
 					<li ng-class="{'active':step==2}" ng-click="setStep(2)"><a href="#">Address</a></li>
 					<li ng-class="{'active':step==3}" ng-click="setStep(3)"><a href="#">Employer</a></li>
+					<li ng-class="{'active':step==4}" ng-click="setStep(4)"><a href="#">Geolocation</a></li>
 				</ul>
 				<form name="form.editPerson">
 					<div class="tab-content col-md-7" ng-show="step == 1">
@@ -126,13 +132,32 @@
   							</div>
 						</div>
 					</div>
+					<div class="tab-content col-md-7" ng-show="step == 4">
+						<div class="form-horizontal" ng-form='step4form'>
+							<div class="form-group">
+								<label for="lat" class="col-md-2 control-label">Latitude</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="companyName" placeholder="Latitude" ng-model="editPerson.address.geo.lat" required>
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="lat" class="col-md-2 control-label">Longitude</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="companyName" placeholder="Longitude" ng-model="editPerson.address.geo.lng" required>
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<map style="display:block;height:300px" center="[{{editPerson.address.geo.lat}}, {{editPerson.address.geo.lat}}]"/>
+							</div>
+						</div>
+					</div>
 				</form>
 			</div>
         </div>
         <div class="modal-footer">
 			<button class="btn btn-primary" ng-click="previous()" ng-show="step > 1" >Prev</button>
-			<button class="btn btn-primary" ng-click="next()" ng-show="step < 3" ng-disabled="form.editPerson.step1form.$invalid">Next</button>
-            <button class="btn btn-success" ng-click="save()" ng-show="step == 3" ng-disabled="form.editPerson.$invalid">Save</button>
+			<button class="btn btn-primary" ng-click="next()" ng-show="step < 4" ng-disabled="form.editPerson.step1form.$invalid">Next</button>
+            <button class="btn btn-success" ng-click="save()" ng-show="step == 4" ng-disabled="form.editPerson.$invalid">Save</button>
             <button style="display:none;" class="btn btn-default" ng-click="cancel()">Cancel</button>
         </div>
     </script>

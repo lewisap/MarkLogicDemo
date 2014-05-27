@@ -21,6 +21,7 @@
  	<http pattern="/fonts/**" security="none"/>
  	<http pattern="/fancybox/**" security="none"/>
  	<http pattern="/images/**" security="none"/>
+ 	<http pattern="/lib/**" security="none"/>
  	<http pattern="/js/**" security="none"/>
  	<http pattern="/pdf-templates/**" security="none"/>
  	
