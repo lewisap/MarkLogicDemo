@@ -244,19 +244,19 @@ public class SearchHelper extends HelperBase {
 		}
 		
 		if (isStateFilter && isCompanyFilter) {
-			query = queryMgr.newStringDefinition("peopleByState");
-			query.setCriteria(criteria + "  companyName:" + company + " state: " + state);
-			//System.out.println(criteria + "  companyName:" + company + " state: " + state);
+			query = queryMgr.newStringDefinition("peopleByStateAndCompany");
+			query.setCriteria(criteria + "and companyName:" + company + "and state:" + state);
+			System.out.println(criteria + "  companyName:" + company + " state:" + state);
 			
 		} else if (isStateFilter && !isCompanyFilter) {
 			query = queryMgr.newStringDefinition("peopleByState");
 			query.setCriteria(criteria + "  state:" + state);
-			//System.out.println(criteria + "  state:" + state);
+			System.out.println(criteria + "  state:" + state);
 			
 		} else if (isCompanyFilter && !isStateFilter) {
 			query = queryMgr.newStringDefinition("peopleByCompany");
 			query.setCriteria(criteria + "  companyName:" + company);
-			//System.out.println(criteria + "  companyName:" + company);
+			System.out.println(criteria + "  companyName:" + company);
 			
 		} else {
 			query = queryMgr.newStringDefinition();
@@ -309,16 +309,16 @@ public class SearchHelper extends HelperBase {
 		StringQueryDefinition query = queryMgr.newStringDefinition("person-companyName-state-facet");
 		
 		if (isStateFilter && isCompanyFilter) {
-			query.setCriteria(criteria + "  companyName:" + company + " state: " + state);
-			//System.out.println(criteria + "  companyName:" + company + " state: " + state);
+			query.setCriteria(criteria + "and companyName:" + company + "and state:" + state);
+			System.out.println(criteria + "  companyName:" + company + " state:" + state);
 			
 		} else if (isStateFilter && !isCompanyFilter) {
 			query.setCriteria(criteria + "  state:" + state);
-			//System.out.println(criteria + "  state:" + state);
+			System.out.println(criteria + "  state:" + state);
 			
 		} else if (isCompanyFilter && !isStateFilter) {
 			query.setCriteria(criteria + "  companyName:" + company);
-			//System.out.println(criteria + "  companyName:" + company);
+			System.out.println(criteria + "  companyName:" + company);
 			
 		} else {
 			query.setCriteria(criteria);

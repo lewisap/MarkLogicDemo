@@ -207,18 +207,28 @@ consumeApp.controller('SearchCtrl', function($scope, searchService, $q, $log, $m
 	
 	$scope.refine = function() {
 		$scope.summaries = [];
+		var company = null;
+		var state = null;
+		
+		if ($scope.companyFilter && $scope.companyFilter.name) {
+			company = $scope.companyFilter.name;
+		}
+		
+		if ($scope.stateFilter && $scope.stateFilter.name) {
+			state = $scope.stateFilter.name;
+		}
 		
 		var promises = [];
 		
 		// fire off the AJAX queries
 		promises.push(searchService.getFilteredPeople(		$scope.searchCriteria,
 															$scope.currentPage,
-															$scope.stateFilter.name,
-															$scope.companyFilter.name));
+															state,
+															company));
 		
 		promises.push(searchService.getFilteredTotalResults($scope.searchCriteria,
-															$scope.stateFilter.name,
-															$scope.companyFilter.name));
+															state,
+															company));
 		
 //		promises.push(searchService.getFilteredSearchFacets($scope.searchCriteria,
 //															$scope.stateFilter.name,
