@@ -243,6 +243,8 @@ consumeApp.controller('SearchCtrl', function($scope, searchService, $q, $log, $m
 		$scope.summaries = [];
 		$scope.states = [];
 		$scope.companies = [];
+		$scope.stateFilter = '';
+		$scope.companyFilter = '';
 		
 		var promises = [];
 		
