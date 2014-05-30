@@ -12,4 +12,8 @@ public final class Constants {
 	
 	// prevent anyone from instantiating this class
 	private Constants() {;}
+	
+	public static String getDatabaseHost() {
+		return "http://" + hostname + ":" + port;
+	}
 }

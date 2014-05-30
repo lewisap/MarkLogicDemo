@@ -68,13 +68,13 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/libs/libs/commons-codec-1.7.jar"/>
-	<classpathentry kind="lib" path="/libs/libs/httpclient-4.1.1.jar"/>
-	<classpathentry kind="lib" path="/libs/libs/httpcore-4.1.jar"/>
 	<classpathentry kind="lib" path="/libs/libs/jcl-over-slf4j-1.7.6.jar"/>
 	<classpathentry kind="lib" path="/libs/libs/jersey-apache-client4-1.17.jar"/>
 	<classpathentry kind="lib" path="/libs/libs/jersey-client-1.17.jar"/>
 	<classpathentry kind="lib" path="/libs/libs/jersey-core-1.17.jar"/>
 	<classpathentry kind="lib" path="/libs/libs/jersey-multipart-1.17.jar"/>
 	<classpathentry kind="lib" path="/libs/libs/mimepull-1.6.jar"/>
+	<classpathentry kind="lib" path="/libs/libs/httpclient-4.3.3.jar"/>
+	<classpathentry kind="lib" path="/libs/libs/httpcore-4.3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

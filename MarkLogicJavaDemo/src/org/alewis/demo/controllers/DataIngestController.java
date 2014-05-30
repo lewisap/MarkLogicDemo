@@ -70,15 +70,15 @@ public class DataIngestController {
 		searchHelper.showQueryOptions();
 	}
 	
-	@RequestMapping(value = "getCompanies", method = RequestMethod.GET)
-	public List<String> getCompanies() throws Exception {
-		return searchHelper.getCompanyList();
-	}
-	
-	@RequestMapping(value = "getStates", method = RequestMethod.GET)
-	public List<String> getStates() throws Exception {
-		return searchHelper.getStateList();
-	}
+//	@RequestMapping(value = "getCompanies", method = RequestMethod.GET)
+//	public List<String> getCompanies() throws Exception {
+//		return searchHelper.getCompanyList();
+//	}
+//	
+//	@RequestMapping(value = "getStates", method = RequestMethod.GET)
+//	public List<String> getStates() throws Exception {
+//		return searchHelper.getStateList();
+//	}
 	
 	@RequestMapping(value = "getSearchFacets", method = RequestMethod.GET)
 	public Map<String, Object[]> getSearchFacets(String criteria) throws Exception {
