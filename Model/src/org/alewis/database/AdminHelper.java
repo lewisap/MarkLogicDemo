@@ -101,6 +101,26 @@ public class AdminHelper extends HelperBase {
 		optHandle.setReturnResults(false);
 		optMgr.writeOptions("person-companyName-state-facet", optHandle);
 		
+		optHandle = new QueryOptionsHandle().withConstraints(
+				optBldr.constraint("state",
+						optBldr.range(
+		                        optBldr.jsonRangeIndex(("state"),
+		                                optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION)),
+		                        Facets.FACETED,
+		                        FragmentScope.DOCUMENTS,
+		                        null,
+		                        "frequency-order", "descending")),
+				optBldr.constraint("companyName",
+						optBldr.range(
+		                        optBldr.jsonRangeIndex(("companyName"),
+		                                optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION)),
+		                        Facets.FACETED,
+		                        FragmentScope.DOCUMENTS,
+		                        null,
+		                        "frequency-order", "descending")));
+		
+		optMgr.writeOptions("statesAndCompanies-facet", optHandle);
+		
 		// option to get all people based on Company Name
 		optHandle = new QueryOptionsHandle().withConstraints(
 				optBldr.constraint("companyName",

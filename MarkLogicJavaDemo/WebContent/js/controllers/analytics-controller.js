@@ -59,15 +59,22 @@ analyticsApp.controller('SearchCtrl', function($scope, $q, $log, $modal) {
 	 */
 	ML.controller.init({proxy: "widgetProxy"});
 	
+	var statesConfig = { constraint: 'state',
+			constraintType: 'range', 
+			dataType: 'string', 
+			title: 'States', 
+			dataLabel: 'state'
+		};
+	
 	var companiesConfig = { constraint: 'companyName',
-							datastream: 'companyName',
-            				constraintType: 'range-unbucketed', 
-            				dataType: 'xs:string', 
-            				title: 'Type', 
-            				dataLabel: 'companyName' };
+            				constraintType: 'range', 
+            				dataType: 'string', 
+            				title: 'Companies', 
+            				dataLabel: 'companyName'
+            			};
 
-	$scope.chartWidget = ML.createWidget($('#companyContainer'), $scope.test, 'companyName', 'range');
 	ML.chartWidget('companyContainer', 'column', companiesConfig);
+	ML.chartWidget('statesContainer', 'column', statesConfig);
 	
 	ML.controller.loadData();
 	/*
@@ -100,12 +107,12 @@ analyticsApp.controller('SearchCtrl', function($scope, $q, $log, $modal) {
 		//var promises = [];
 		
 		//ML.updateQuery($scope.searchCriteria);//TODO
-		$scope.chartWidget.updateQuery({
-			facet			: '',
-			value			: '',
-			text			: $scope.searchCriteria,
-			constraintType	: 'range'
-		});
+//		$scope.chartWidget.updateQuery({
+//			facet			: '',
+//			value			: '',
+//			text			: $scope.searchCriteria,
+//			constraintType	: 'range'
+//		});
 		
 		// fire off the AJAX queries
 //		promises.push(searchService.getPeople(	$scope.searchCriteria,

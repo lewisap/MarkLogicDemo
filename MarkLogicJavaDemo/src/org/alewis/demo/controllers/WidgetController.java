@@ -85,7 +85,7 @@ public class WidgetController {
 		System.out.println(url);
 //		url = appendUrlParameter(url, "q", "Adolph");  TODO - need to add the current query along on this
 //		System.out.println(url);
-		url = appendUrlParameter(url, "options", "person-companyName-state-facet");
+		url = appendUrlParameter(url, "options", "statesAndCompanies-facet");
 		System.out.println(url);
 		
 		Enumeration<String> e = request.getParameterNames();
