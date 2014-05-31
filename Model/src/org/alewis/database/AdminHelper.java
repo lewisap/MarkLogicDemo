@@ -2,6 +2,8 @@ package org.alewis.database;
 
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+
 import org.alewis.database.base.HelperBase;
 import org.springframework.stereotype.Component;
 
@@ -125,6 +127,35 @@ public class AdminHelper extends HelperBase {
 								optBldr.jsonTermIndex("companyName"))));
 				
 		optMgr.writeOptions("peopleByStateAndCompany", optHandle);
+
+		optHandle = new QueryOptionsHandle().withConstraints(
+				optBldr.constraint("name",
+		                optBldr.range(
+		                        optBldr.jsonRangeIndex(("name"),
+		                                optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION)),
+		                        Facets.FACETED,
+		                        FragmentScope.DOCUMENTS,
+		                        null,
+		                        "frequency-order", "descending")),
+				optBldr.constraint("geo",
+						optBldr.geospatial(
+								optBldr.elementPairGeospatialIndex(
+										new QName("http://marklogic.com/xdmp/json/basic", "geo"), 
+										new QName("http://marklogic.com/xdmp/json/basic", "lat"), 
+										new QName("http://marklogic.com/xdmp/json/basic", "lng")))),
+						optBldr.constraint("eq-name", 
+								optBldr.elementQuery(new QName("name"))));
+		
+		optMgr.writeOptions("geospatial", optHandle);
+		
+		/*
+		 * String opts = new StringoptBldr()
+     			.append("<options xmlns=\"http://marklogic.com/appservices/search\">")
+     			.append(    "<debug>true</debug>")
+     			.append("</options>")
+     			.toString();
+			optsMgr.writeOptions("debug", new StringHandle(opts));
+		 */
 		
 		closeConnection();
 	}

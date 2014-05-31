@@ -12,23 +12,6 @@
 
 <script type="text/javascript" src="js/controllers/consume-controller.js"></script>
 
-<!-- external library dependencies -->
-<script src="lib/external/jquery-1.7.1.min.js"
-        type="text/javascript"></script>
-<script src="lib/external/highcharts.src.js"
-        type="text/javascript"></script>
-        <!-- external web map files... -->
-<script src="http://maps.googleapis.com/maps/api/js?key=&amp;sensor=false&amp;region=US&amp;libraries=drawing" 
-		type="text/javascript"></script>
-<script src="lib/external/mxn-2.0.18/mxn.js?(googlev3)" type="text/javascript"></script>
-<script src="lib/external/heatmap.js" type="text/javascript"></script>
-<script src="lib/external/heatmap-gmaps.js" type="text/javascript"></script>
-<script src="lib/external/markerclusterer_min.js" type="text/javascript"></script>
-<!-- internal widget framework library -->
-<script src="lib/controller.js" type="text/javascript"></script>
-<script src="lib/widget.js" type="text/javascript"></script>
-<script src="lib/viz/map/map.js" type="text/javascript"></script>
-
 <style>
 .nav,.pagination,.carousel,.panel-title a {cursor: pointer;}
 .widget {width: 500px;display: block;float: left;}
@@ -189,6 +172,7 @@
 				<ul class="nav navbar-nav">
 					<li><a href="ingest.html">Ingestor</a></li>
 					<li class="active"><a href="consume.html">Consumer</a></li>
+					<li><a href="analytics.html">Analytics</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -198,10 +182,6 @@
 			<button type="button" class="btn btn-danger btn-sm" ng-click="clearQueryOptions()">Clear Query Options</button>
 			<!-- <button type="button" class="btn btn-danger btn-sm" ng-click="getFacetedResults()">Test Facets</button> -->
 		</div>
-		
-		<div id="decadeContainer" class="widget"></div>
-		<div id="actorContainer" class="widget"></div>
-		<div id="locationContainer" class="widget"></div>
 		
 		<alert ng-repeat="alert in alerts" type="{{alert.type}}"
 			close="closeAlert($index)">{{alert.msg}}</alert>
@@ -225,13 +205,13 @@
 						<option value=""></option>
 					</select>
 				</div>
-				<div class="col-md-2" ng-show="states.length > 0">
+				<!-- <div class="col-md-2" ng-show="states.length > 0">
 					<label for="country-select">States Filter</label>
 					<select class="form-control" id="state-select" ng-model="stateFilter" 
 											ng-options="state.name +' (' + state.count + ')' for state in states" ng-change="refine()">
 						<option value=""></option>
 					</select>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		

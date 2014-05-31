@@ -139,21 +139,6 @@ consumeApp.controller('SearchCtrl', function($scope, searchService, $q, $log, $m
 	$scope.totalResults = 0;
 	$scope.currentPage = 1;
 	
-	/*
-	 * MAP Widget code here
-	 */
-	ML.controller.init({proxy: "mapProxy"});
-	
-	var mapConfig = {
-			imageDir : "images/map/"
-	};
-	ML.mapWidget('locationContainer', 'map', mapConfig);
-	
-	ML.controller.loadData();
-	/*
-	 * END MAP WIDGET CODE
-	 */
-	
 	$scope.setQueryOptions = function() {
 		searchService.setQueryOptions();
 	};
