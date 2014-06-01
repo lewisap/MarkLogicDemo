@@ -71,29 +71,22 @@ public class AdminHelper extends HelperBase {
 		
 		optMgr.writeOptions("statesAndCompanies", optHandle);
 		
-		// option to get all people
+		// Facet for people against state and companyName
 		optHandle = new QueryOptionsHandle().withValues(
 				optBldr.values("name",
 						optBldr.range(
 								optBldr.jsonRangeIndex("name",
-										optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION)))));
-		
-		optMgr.writeOptions("people", optHandle);
-		
-		// facet that ties the person name, company name, and state together
-		optHandle.withConstraints(
-		        optBldr.constraint("name",
-		                optBldr.range(
-		                        optBldr.jsonRangeIndex(("name"),
-		                                optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION)),
-		                        Facets.FACETED,
-		                        FragmentScope.DOCUMENTS,
-		                        null,
-		                        "frequency-order", "descending")),
+										optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION))))).withConstraints(
 		        optBldr.constraint("companyName",
 		                optBldr.range(
 		                        optBldr.jsonRangeIndex(("companyName"),
 		                                optBldr.stringRangeType(QueryOptions.DEFAULT_COLLATION)))),
+                optBldr.constraint("geo",
+						optBldr.geospatial(
+								optBldr.elementPairGeospatialIndex(
+										new QName("geo"), 
+										new QName("lat"), 
+										new QName("lng")))),
                 optBldr.constraint("state",
 		                optBldr.range(
 		                        optBldr.jsonRangeIndex(("state"),

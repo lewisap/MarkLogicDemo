@@ -15,9 +15,13 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,7 +72,7 @@ public class WidgetController {
 	    return hpos == -1 ? url + seg : url.substring(0, hpos) + seg
 	        + url.substring(hpos);
 	}
-
+	
 	@RequestMapping(value = "widgetProxy", method = RequestMethod.POST)
 	public String chartProxy(	@RequestParam String proxyPath, 
 							@RequestParam Integer start,
@@ -76,6 +80,7 @@ public class WidgetController {
 							@RequestParam String format,
 							@RequestParam Integer pageLength,
 							@RequestParam String options,
+							@RequestBody String query,
 							HttpServletRequest request) throws Exception {
 		
 		System.out.println("INSIDE THE PROXY | " + proxyPath);
@@ -97,9 +102,49 @@ public class WidgetController {
 		}
 		System.out.println();
 		
-		ResponseEntity<String> response = getRestTemplate().exchange(url, HttpMethod.GET, null, String.class);
+		System.out.println(query);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		//set your entity to send
+		HttpEntity<String> entity = new HttpEntity<String>(query, headers);
+		
+		ResponseEntity<String> response = getRestTemplate().exchange(url, HttpMethod.POST, entity, String.class);
 		String out = response.getBody();
-		//System.out.println(out);
 		return out;
 	}
+
+//	@RequestMapping(value = "widgetProxy", method = RequestMethod.POST)
+//	public String chartProxy(	@RequestParam String proxyPath, 
+//							@RequestParam Integer start,
+//							@RequestParam String view,
+//							@RequestParam String format,
+//							@RequestParam Integer pageLength,
+//							@RequestParam String options,
+//							HttpServletRequest request) throws Exception {
+//		
+//		System.out.println("INSIDE THE PROXY | " + proxyPath);
+//		String url = Constants.getDatabaseHost() + proxyPath;
+//		System.out.println(url);
+//		url = appendUrlParameter(url, "start", start.toString());
+//		System.out.println(url);
+////		url = appendUrlParameter(url, "q", "Adolph");  TODO - need to add the current query along on this
+////		System.out.println(url);
+//		url = appendUrlParameter(url, "options", "statesAndCompanies-facet");
+//		System.out.println(url);
+//		
+//		Enumeration<String> e = request.getParameterNames();
+//		while (e.hasMoreElements()) {
+//			String name = e.nextElement();
+//			for (String val : request.getParameterValues(name)) {
+//				System.out.print(" {" + name + " | " + val + "} ");
+//			}
+//		}
+//		System.out.println();
+//		
+//		ResponseEntity<String> response = getRestTemplate().exchange(url, HttpMethod.GET, null, String.class);
+//		String out = response.getBody();
+//		//System.out.println(out);
+//		return out;
+//	}
 }

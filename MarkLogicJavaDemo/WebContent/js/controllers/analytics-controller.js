@@ -1,4 +1,8 @@
-var analyticsApp = angular.module('analyticsApp', ['ui.bootstrap']);
+var analyticsApp = angular.module('analyticsApp', ['ui.bootstrap'])
+	.config(function($locationProvider) {
+		// use the HTML5 History API
+		$locationProvider.html5Mode(true);
+	});
 
 //debounce directive, to delay input
 analyticsApp.directive('ngDebounce', function ($timeout) {
@@ -37,7 +41,7 @@ analyticsApp.directive('ngDebounce', function ($timeout) {
 	};
 });
 
-analyticsApp.controller('SearchCtrl', function($scope, $q, $log, $modal) {
+analyticsApp.controller('SearchCtrl', function($scope, $q, $log, $location) {
 	$scope.alerts = [];
 	$scope.summaries = [];
 	$scope.searchCriteria = '';
@@ -62,19 +66,20 @@ analyticsApp.controller('SearchCtrl', function($scope, $q, $log, $modal) {
 	var statesConfig = { constraint: 'state',
 			constraintType: 'range', 
 			dataType: 'string', 
-			title: 'States', 
+			title: 'State Distribution', 
 			dataLabel: 'state'
 		};
 	
 	var companiesConfig = { constraint: 'companyName',
             				constraintType: 'range', 
             				dataType: 'string', 
-            				title: 'Companies', 
+            				title: 'Company Distribution', 
             				dataLabel: 'companyName'
             			};
-
+	
+//	var companyChart = 
 	ML.chartWidget('companyContainer', 'column', companiesConfig);
-	ML.chartWidget('statesContainer', 'column', statesConfig);
+	ML.chartWidget('statesContainer', 'pie', statesConfig);
 	
 	ML.controller.loadData();
 	/*
@@ -104,6 +109,15 @@ analyticsApp.controller('SearchCtrl', function($scope, $q, $log, $modal) {
 		$scope.stateFilter = '';
 		$scope.companyFilter = '';
 		
+//		if ($scope.searchCriteria) {
+//			
+//		}
+		$location.search({'q': $scope.searchCriteria});
+		//$log.info($location);
+		alert($location.$$absUrl);
+		window.location = $location.$$absUrl;
+		
+//		ML.controller.loadData();
 		//var promises = [];
 		
 		//ML.updateQuery($scope.searchCriteria);//TODO
