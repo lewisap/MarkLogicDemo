@@ -104,47 +104,8 @@ analyticsApp.controller('SearchCtrl', function($scope, $q, $log, $location) {
 	
 	$scope.search = function(page) {
 		$scope.summaries = [];
-		$scope.states = [];
-		$scope.companies = [];
-		$scope.stateFilter = '';
-		$scope.companyFilter = '';
 		
-//		if ($scope.searchCriteria) {
-//			
-//		}
 		$location.search({'q': $scope.searchCriteria});
-		//$log.info($location);
-		alert($location.$$absUrl);
 		window.location = $location.$$absUrl;
-		
-//		ML.controller.loadData();
-		//var promises = [];
-		
-		//ML.updateQuery($scope.searchCriteria);//TODO
-//		$scope.chartWidget.updateQuery({
-//			facet			: '',
-//			value			: '',
-//			text			: $scope.searchCriteria,
-//			constraintType	: 'range'
-//		});
-		
-		// fire off the AJAX queries
-//		promises.push(searchService.getPeople(	$scope.searchCriteria,
-//												page));
-//		promises.push(searchService.getTotalResults($scope.searchCriteria));
-//		promises.push(searchService.getSearchFacets($scope.searchCriteria));
-//		
-//		$q.all(promises).then(function success(value) {
-//			// value[0] = getPeople return
-//			$scope.summaries = value[0].data;
-//
-//			// value[1] = getTotalResults return
-//			$scope.totalResults = value[1].data;
-//			
-//			// value[2] = getSearchFacets return
-//			$log.info(value[2].data);
-//			$scope.companies = value[2].data.companyName;
-//			$scope.states = value[2].data.state;
-//		});
 	};
 });

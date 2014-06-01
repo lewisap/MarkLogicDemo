@@ -1,4 +1,8 @@
-var ingestApp = angular.module('ingestApp', ['ui.bootstrap']);
+var ingestApp = angular.module('ingestApp', ['ui.bootstrap'])
+	.config(function($locationProvider) {
+		// use the HTML5 History API
+		$locationProvider.html5Mode(true);
+	});
 
 //define our service for the AJAX call
 ingestApp.factory('ingestService', function($http) {

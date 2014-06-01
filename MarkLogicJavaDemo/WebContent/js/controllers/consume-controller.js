@@ -1,4 +1,8 @@
-var consumeApp = angular.module('consumeApp', ['ui.bootstrap']);
+var consumeApp = angular.module('consumeApp', ['ui.bootstrap'])
+		.config(function($locationProvider) {
+			// use the HTML5 History API
+			$locationProvider.html5Mode(true);
+		});
 
 consumeApp.factory('searchService', function($http) {
 	return {
