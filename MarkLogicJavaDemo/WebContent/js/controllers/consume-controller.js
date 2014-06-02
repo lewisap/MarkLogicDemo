@@ -143,6 +143,15 @@ consumeApp.controller('SearchCtrl', function($scope, searchService, $q, $log, $m
 	$scope.totalResults = 0;
 	$scope.currentPage = 1;
 	
+	$scope.checkDebug = function() {
+		var debug = window.location.search;
+		if (debug.indexOf("debug") > -1) {
+			return true;
+		}
+		
+		return false;
+	};
+	
 	$scope.setQueryOptions = function() {
 		searchService.setQueryOptions();
 	};
