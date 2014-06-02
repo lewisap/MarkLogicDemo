@@ -60,13 +60,14 @@
 		
 		<div class="jumbotron">
         	<h1>Person Analytics</h1>
-        	<p>This example is a quick exercise to search one or more <b><i>fake</i></b> Person records, and allow the edit their records</p> 
+        	<p>Example page to perform simple analytical queries using the MarkLogic Visualization Widgets, allowing a 
+        	user to refine the search based on any criteria.</p> 
 		</div>
 		
 		<div class="panel panel-primary">
 			<div class="panel-body">
 				<div>
-					<input type="text" class="form-control" id="input-search" placeholder="Enter Search Criteria" ng-model="searchCriteria" ng-debounce="1000" ng-change="search()"/>
+					<input type="text" class="form-control" id="input-search" placeholder="Refine results" ng-model="searchCriteria" ng-debounce="1000" ng-change="search()"/>
 				</div>
 			</div>
 		</div>

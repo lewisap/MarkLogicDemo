@@ -164,6 +164,9 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, $log, edit, person, $q
 	// scoping issues, define a form here and in the page define the <form> as <form name="form.something"/>
 	$scope.form = {};
 	
+	// define my own alerts
+	$scope.alerts = [];
+	
 	// set the modal header appropriately
 	$scope.edit = edit;
 	
@@ -175,10 +178,11 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, $log, edit, person, $q
 		var promises = [];
 		promises.push(ingestService.updatePerson($scope.editPerson));
 		$q.all(promises).then(function success(value){
-			alert ('Successfully added the person into the database');
+			//alert ('Successfully added the person into the database');
 			$modalInstance.close(null);
 		}, function failure(err){
-			alert('Unable to insert the person');
+			$scope.alerts.push({msg: 'Unable to insert one or more generated people', type: 'danger'});
+			//alert('Unable to insert the person');
 		});
 	};
 
@@ -198,5 +202,9 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, $log, edit, person, $q
 	
 	$scope.next = function() {
 		$scope.step ++;
+	};
+	
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
 	};
 };
