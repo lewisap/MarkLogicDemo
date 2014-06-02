@@ -37,7 +37,7 @@ appender("PERF_LOG", RollingFileAppender) {
 	}
 }
 
-logger("org.springframework", INFO)				// spring logging
+logger("org.springframework", DEBUG)				// spring logging
 logger("performance", INFO, ["PERF_LOG"], false)	// performance logging
 
 root(DEBUG, ["FILE"])								// root logger

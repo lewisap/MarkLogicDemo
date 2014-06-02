@@ -5,7 +5,11 @@ import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 @SuppressWarnings("unused")
+@JsonInclude(Include.NON_NULL)
 public class GeoLocation implements Serializable {
 	private static final long serialVersionUID = -7268578251219962661L;
 

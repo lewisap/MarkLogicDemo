@@ -69,12 +69,6 @@
 					<div class="tab-content col-md-7" ng-show="step == 2">
 						<div class="form-horizontal" ng-form='step2form'>
 							<div class="form-group">
-								<label for="city" class="col-md-2 control-label">City</label>
-   	   							<div class="col-md-10">
-   	     							<input type="text" class="form-control" id="city" placeholder="Name" ng-model="editPerson.address.city" required>
-   	   							</div>
-  							</div>
-							<div class="form-group">
 								<label for="streetA" class="col-md-2 control-label">Street</label>
    	   							<div class="col-md-10">
    	     							<input type="text" class="form-control" id="streetA" placeholder="Street" ng-model="editPerson.address.streetA" required>
@@ -96,6 +90,12 @@
 								<label for="streetD" class="col-md-2 control-label"></label>
    	   							<div class="col-md-10">
    	     							<input type="text" class="form-control" id="streetD" placeholder="" ng-model="editPerson.address.streetD">
+   	   							</div>
+  							</div>
+							<div class="form-group">
+								<label for="city" class="col-md-2 control-label">City</label>
+   	   							<div class="col-md-10">
+   	     							<input type="text" class="form-control" id="city" placeholder="Name" ng-model="editPerson.address.city" required>
    	   							</div>
   							</div>
 							<div class="form-group">
@@ -134,7 +134,8 @@
         <div class="modal-footer">
 			<button class="btn btn-primary" ng-click="previous()" ng-show="step > 1" >Prev</button>
 			<button class="btn btn-primary" ng-click="next()" ng-show="step < 3" ng-disabled="form.editPerson.step1form.$invalid">Next</button>
-            <button class="btn btn-success" ng-click="ok()" ng-show="step == 3" ng-disabled="form.editPerson.$invalid">Save</button>
+            <!--<button class="btn btn-success" ng-click="save()" ng-show="step == 3" ng-disabled="form.editPerson.$invalid">Save</button>-->
+			<button class="btn btn-success" ng-click="save()">Save</button>
             <button style="display:none;" class="btn btn-default" ng-click="cancel()">Cancel</button>
         </div>
     </script>

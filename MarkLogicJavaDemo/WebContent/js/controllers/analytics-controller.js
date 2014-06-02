@@ -44,7 +44,7 @@ analyticsApp.directive('ngDebounce', function ($timeout) {
 analyticsApp.controller('SearchCtrl', function($scope, $q, $log, $location) {
 	$scope.alerts = [];
 	$scope.summaries = [];
-	$scope.searchCriteria = '';
+	$scope.searchCriteria = $location.search().q;
 	$scope.companyFilter = '';
 	$scope.stateFilter = '';
 	
@@ -57,6 +57,11 @@ analyticsApp.controller('SearchCtrl', function($scope, $q, $log, $location) {
 	$scope.test = function(dat) {
 		$log.info(dat);
 	};
+	
+	// fix the navigation issues between jquery and angular?  TODO - figure out why this is happening
+	$('.fixedLink').click(function(e) {
+		window.location.href = $(this).attr('href');
+	});
 	
 	/*
 	 * CHART WIDGET 
@@ -77,7 +82,6 @@ analyticsApp.controller('SearchCtrl', function($scope, $q, $log, $location) {
             				dataLabel: 'companyName'
             			};
 	
-//	var companyChart = 
 	ML.chartWidget('companyContainer', 'column', companiesConfig);
 	ML.chartWidget('statesContainer', 'pie', statesConfig);
 	

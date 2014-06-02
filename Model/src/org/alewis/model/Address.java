@@ -1,13 +1,15 @@
 package org.alewis.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 @SuppressWarnings("unused")
+@JsonInclude(Include.NON_NULL)
 public class Address implements Serializable {
 	private static final long serialVersionUID = 8510747122712535443L;
 

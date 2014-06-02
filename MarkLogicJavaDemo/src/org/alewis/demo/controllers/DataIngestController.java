@@ -52,12 +52,6 @@ public class DataIngestController {
 		searchHelper.deletePerson(uri);
 	}
 	
-	@RequestMapping(value = "updatePerson", method = RequestMethod.POST)
-	public void updatePerson(@RequestBody Person person) throws Exception {
-		logger.debug(person.toString() + " | " + person.getUri());
-		searchHelper.updatePerson(person.getUri(), person);
-	}
-	
 	@RequestMapping(value = "setQueryOptions", method = RequestMethod.POST)
 	public void setQueryOptions() throws Exception {
 		adminHelper.setQueryOptions();
@@ -134,13 +128,24 @@ public class DataIngestController {
 	 * @return
 	 * @throws Exception 
 	 */
-	@RequestMapping(value = "insertPerson", method = RequestMethod.POST)
+	@RequestMapping(value = "insertPeople", method = RequestMethod.POST)
 	public void insertPerson(@RequestBody List<Person> people) throws Exception {
 		/*
 		 * pass in a Person object and tell the controller method that is should
 		 * be built from the request body (@RequestBody) - uses Jackson by default if found on classpath
 		 */
 		searchHelper.writePeople(people);
+	}
+	
+	@RequestMapping(value = "updatePerson", method = RequestMethod.POST)
+	public void updatePerson(@RequestBody Person person) {
+		System.out.println(person.toString() + " | " + person.getUri());
+		logger.debug(person.toString() + " | " + person.getUri());
+		try {
+			searchHelper.updatePerson(person.getUri(), person);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@SuppressWarnings("unused")
