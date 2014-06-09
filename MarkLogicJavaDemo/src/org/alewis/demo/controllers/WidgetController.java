@@ -34,6 +34,10 @@ public class WidgetController {
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(WidgetController.class);
 	
+	/**
+	 * Get a rest template object for use with Basic Authentication, as per the widget spec
+	 * @return
+	 */
 	private RestTemplate getRestTemplate() {
 		DefaultHttpClient newHttpClient = new DefaultHttpClient();
 		Credentials credentials = new UsernamePasswordCredentials( Constants.username, Constants.password );
@@ -73,6 +77,20 @@ public class WidgetController {
 	        + url.substring(hpos);
 	}
 	
+	/**
+	 * Expose a proxy for the widgets to use for authentication/searching against the database
+	 * 
+	 * @param proxyPath
+	 * @param start
+	 * @param view
+	 * @param format
+	 * @param pageLength
+	 * @param options
+	 * @param query
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "widgetProxy", method = RequestMethod.POST)
 	public String chartProxy(	@RequestParam String proxyPath, 
 							@RequestParam Integer start,

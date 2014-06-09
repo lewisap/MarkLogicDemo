@@ -16,6 +16,13 @@ import com.marklogic.client.io.QueryOptionsHandle;
 import com.marklogic.client.io.QueryOptionsListHandle;
 import com.marklogic.client.query.QueryManager;
 
+/**
+ * "Database" class that handles admin level database settings
+ * - Setting up the query options for example
+ * 
+ * @author lewisap
+ *
+ */
 @SuppressWarnings({ "deprecation" })
 @Component
 public class AdminHelper extends HelperBase {
@@ -36,6 +43,11 @@ public class AdminHelper extends HelperBase {
 		closeConnection();
 	}
 	
+	/**
+	 * Function to set the query options in the database.
+	 * 
+	 * TODO - lots of old test code in here, need to remove it / comment it out
+	 */
 	public void setQueryOptions() {
 		QueryOptionsManager optMgr = getClient().newServerConfigManager().newQueryOptionsManager();
 		QueryOptionsBuilder optBldr = new QueryOptionsBuilder();

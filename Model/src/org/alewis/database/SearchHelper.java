@@ -31,6 +31,12 @@ import com.marklogic.client.query.QueryManager;
 import com.marklogic.client.query.StringQueryDefinition;
 import com.marklogic.client.query.ValuesDefinition;
 
+/**
+ * "Database" class to handle any requests related to searching.
+ * 
+ * @author lewisap
+ *
+ */
 @Component
 public class SearchHelper extends HelperBase {
 	private static final Logger logger = LoggerFactory.getLogger(SearchHelper.class);

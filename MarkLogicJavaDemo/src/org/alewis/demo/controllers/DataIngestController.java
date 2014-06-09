@@ -21,6 +21,12 @@ import com.marklogic.client.io.DocumentMetadataHandle;
 import com.marklogic.client.io.StringHandle;
 import com.marklogic.client.query.MatchDocumentSummary;
 
+/**
+ * Class to expose all AJAX request handlers for this application.
+ * 
+ * @author lewisap
+ *
+ */
 @RestController
 public class DataIngestController {
 	private static final Logger logger = LoggerFactory.getLogger(DataIngestController.class);

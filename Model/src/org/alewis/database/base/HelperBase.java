@@ -6,6 +6,14 @@ import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.DatabaseClientFactory;
 import com.marklogic.client.DatabaseClientFactory.Authentication;
 
+/**
+ * Parent class of the database classes that handles simple database connection setup
+ * - retrieves a connection
+ * - exposes the close connection 
+ * 
+ * @author lewisap
+ *
+ */
 public class HelperBase {
 	private DatabaseClient client = null;
 
